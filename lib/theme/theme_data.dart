@@ -21,7 +21,7 @@ abstract class ApplicationTheme {
     brightness: Brightness.light,
     primary: Color.fromRGBO(183, 236, 239, 1.0),
     onPrimary: Color.fromRGBO(40, 42, 58, 1.0),
-    secondary: Color.fromRGBO(179, 181, 189, 1.0),
+    secondary: Color.fromRGBO(148, 150, 161, 1.0),
     onSecondary: Color.fromRGBO(64, 66, 82, 1.0),
     error: Colors.redAccent,
     onError: Colors.white70,
@@ -52,16 +52,19 @@ abstract class ApplicationTheme {
   static const _bold = FontWeight.w700;
 
   static final TextTheme _textTheme = TextTheme(
-    headlineLarge: GoogleFonts.karla(fontWeight: _bold, fontSize: 60),
-    headlineMedium: GoogleFonts.karla(fontWeight: _bold, fontSize: 20.0),
-    bodySmall: GoogleFonts.titilliumWeb(fontWeight: _semiBold, fontSize: 16.0),
-    headlineSmall: GoogleFonts.titilliumWeb(fontWeight: _medium, fontSize: 16.0),
-    titleMedium: GoogleFonts.karla(fontWeight: _medium, fontSize: 16.0),
-    labelSmall: GoogleFonts.karla(fontWeight: _medium, fontSize: 12.0),
-    bodyLarge: GoogleFonts.karla(fontWeight: _regular, fontSize: 14.0),
+    headlineSmall: GoogleFonts.karla(fontWeight: _medium, fontSize: 22.0),
+    headlineMedium: GoogleFonts.karla(fontWeight: _bold, fontSize: 30.0),
+    headlineLarge: GoogleFonts.karla(fontWeight: _bold, fontSize: 38.0),
+
+    bodySmall: GoogleFonts.karla(fontWeight: _semiBold, fontSize: 12.0),
+    bodyMedium: GoogleFonts.karla(fontWeight: _regular, fontSize: 14.0),
+    bodyLarge: GoogleFonts.karla(fontWeight: _regular, fontSize: 16.0),
+
     titleSmall: GoogleFonts.karla(fontWeight: _medium, fontSize: 14.0),
-    bodyMedium: GoogleFonts.karla(fontWeight: _regular, fontSize: 16.0),
-    titleLarge: GoogleFonts.karla(fontWeight: _bold, fontSize: 16.0),
-    labelLarge: GoogleFonts.karla(fontWeight: _semiBold, fontSize: 14.0),
+    titleMedium: GoogleFonts.karla(fontWeight: _medium, fontSize: 16.0),
+    titleLarge: GoogleFonts.karla(fontWeight: _bold, fontSize: 22.0),
+
+    labelSmall: GoogleFonts.karla(fontWeight: _medium, fontSize: 12.0),
+    labelLarge: GoogleFonts.karla(fontWeight: _semiBold, fontSize: 16.0),
   );
 }
