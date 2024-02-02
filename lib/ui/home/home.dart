@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
+import 'package:weather_app/ui/widgets/language_selector.dart';
+import 'package:weather_app/ui/widgets/temp_switch.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -14,11 +16,30 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Column(
-        children: [
-          Center(child: Text('Weather application')),
-        ],
+    const String currentDate = 'Mon, 15 May, 2023';
+
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(currentDate, style: Theme.of(context).textTheme.headlineLarge),
+                const SizedBox(
+                  child: Row(
+                    children: [
+                      LanguageSelector(),
+                      SizedBox(width: 20),
+                      TemperatureSwitch(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
