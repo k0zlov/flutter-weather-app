@@ -11,6 +11,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
   String selectedLanguage = 'English';
   List<String> languages = ['Spanish', 'French', 'German', 'English'];
   bool isOpened = false;
+  bool isHovered = false;
 
   List<String> getLanguages() {
     return languages.where((element) => element != selectedLanguage).toList();
@@ -18,37 +19,46 @@ class _LanguageSelectorState extends State<LanguageSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _showLanguagePicker,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: const Radius.circular(10),
-            topLeft: const Radius.circular(10),
-            bottomRight: Radius.circular(isOpened ? 0 : 10),
-            bottomLeft: Radius.circular(isOpened ? 0 : 10),
+    return MouseRegion(
+      onEnter: (_) => setState(() {
+        isHovered = true;
+      }),
+      onExit: (_) => setState(() {
+        isHovered = false;
+      }),
+      child: GestureDetector(
+        onTap: _showLanguagePicker,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topRight: const Radius.circular(10),
+              topLeft: const Radius.circular(10),
+              bottomRight: Radius.circular(isOpened ? 0 : 10),
+              bottomLeft: Radius.circular(isOpened ? 0 : 10),
+            ),
+            color: isHovered
+                ? Theme.of(context).colorScheme.onSurface.withOpacity(0.18)
+                : Theme.of(context).colorScheme.onBackground,
           ),
-          color: Theme.of(context).colorScheme.onBackground,
-        ),
-        height: 45,
-        width: 120,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                selectedLanguage,
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 18,
-                    ),
-              ),
-              Icon(
-                isOpened ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ],
+          height: 45,
+          width: 120,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  selectedLanguage,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                  ),
+                ),
+                Icon(
+                  isOpened ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -83,11 +93,17 @@ class _LanguageSelectorState extends State<LanguageSelector> {
       ),
       items: getLanguages().map((String language) {
         return PopupMenuItem<String>(
-          textStyle: Theme.of(context).textTheme.bodyMedium,
           value: language,
           child: SizedBox(
             // width: button.size.width,
-            child: Center(child: Text(language)),
+            child: Center(
+              child: Text(
+                language,
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                    ),
+              ),
+            ),
           ),
         );
       }).toList(),

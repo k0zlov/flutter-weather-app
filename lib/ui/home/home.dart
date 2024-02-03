@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
 import 'package:weather_app/ui/widgets/language_selector.dart';
-import 'package:weather_app/ui/widgets/temp_switch.dart';
+import 'package:weather_app/ui/widgets/search_field.dart';
+import 'package:weather_app/ui/widgets/theme_switch.dart';
+import 'package:weather_app/ui/widgets/units_switch.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -30,9 +32,13 @@ class HomePage extends StatelessWidget {
                 const SizedBox(
                   child: Row(
                     children: [
+                      SearchField(),
+                      SizedBox(width: 20),
                       LanguageSelector(),
                       SizedBox(width: 20),
-                      TemperatureSwitch(),
+                      ThemeSwitch(),
+                      SizedBox(width: 20),
+                      UnitsSwitch(),
                     ],
                   ),
                 ),

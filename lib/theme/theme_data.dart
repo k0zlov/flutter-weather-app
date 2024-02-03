@@ -61,7 +61,7 @@ abstract class ApplicationTheme {
     bodyLarge: GoogleFonts.karla(fontWeight: _regular, fontSize: 16.0),
 
     titleSmall: GoogleFonts.karla(fontWeight: _medium, fontSize: 14.0),
-    titleMedium: GoogleFonts.karla(fontWeight: _medium, fontSize: 16.0),
+    titleMedium: GoogleFonts.karla(fontWeight: _bold, fontSize: 18.0),
     titleLarge: GoogleFonts.karla(fontWeight: _bold, fontSize: 22.0),
 
     labelSmall: GoogleFonts.karla(fontWeight: _medium, fontSize: 12.0),
