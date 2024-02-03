@@ -37,7 +37,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
               bottomLeft: Radius.circular(isOpened ? 0 : 10),
             ),
             color: isHovered
-                ? Theme.of(context).colorScheme.onSurface.withOpacity(0.18)
+                ? Theme.of(context).colorScheme.onSurface.withOpacity(0.25)
                 : Theme.of(context).colorScheme.onBackground,
           ),
           height: 45,

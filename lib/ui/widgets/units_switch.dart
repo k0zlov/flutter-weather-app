@@ -34,7 +34,7 @@ class _UnitsSwitchState extends State<UnitsSwitch> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: isHovered
-                ? Theme.of(context).colorScheme.onSurface.withOpacity(0.18)
+                ? Theme.of(context).colorScheme.onSurface.withOpacity(0.25)
                 : Theme.of(context).colorScheme.onBackground,
           ),
           child: Padding(
