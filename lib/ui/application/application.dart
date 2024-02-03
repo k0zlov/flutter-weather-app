@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/theme/theme_data.dart';
@@ -22,6 +24,15 @@ class WeatherApplication extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: applicationState.isDarkTheme ? ApplicationTheme.darkThemeData : ApplicationTheme.lightThemeData,
       home: HomePage.render(),
+      scrollBehavior: CustomScrollBehavior(),
     );
   }
+}
+
+class CustomScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+  };
 }
