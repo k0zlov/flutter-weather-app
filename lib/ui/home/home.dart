@@ -20,33 +20,42 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     const String currentDate = 'Mon, 15 May, 2023';
 
-    return Scaffold(
+    return const Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 18),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(currentDate, style: Theme.of(context).textTheme.headlineLarge),
-                const SizedBox(
-                  child: Row(
-                    children: [
-                      SearchField(),
-                      SizedBox(width: 20),
-                      LanguageSelector(),
-                      SizedBox(width: 20),
-                      ThemeSwitch(),
-                      SizedBox(width: 20),
-                      UnitsSwitch(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            AppBar(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class AppBar extends StatelessWidget {
+  const AppBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text('Mon, 15 May, 2023', style: Theme.of(context).textTheme.headlineLarge),
+        const SizedBox(
+          child: Row(
+            children: [
+              SearchField(),
+              SizedBox(width: 20),
+              LanguageSelector(),
+              SizedBox(width: 20),
+              ThemeSwitch(),
+              SizedBox(width: 20),
+              UnitsSwitch(),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
