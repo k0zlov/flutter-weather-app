@@ -19,7 +19,7 @@ abstract class ApplicationTheme {
 
   static const ColorScheme lightColorScheme = ColorScheme(
     brightness: Brightness.light,
-    primary: Color.fromRGBO(183, 236, 239, 1.0),
+    primary: Color.fromRGBO(147, 238, 241, 1.0),
     onPrimary: Color.fromRGBO(40, 42, 58, 1.0),
     secondary: Color.fromRGBO(179, 181, 189, 1.0),
     onSecondary: Color.fromRGBO(64, 66, 82, 1.0),
