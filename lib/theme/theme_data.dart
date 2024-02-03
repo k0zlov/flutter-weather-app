@@ -21,7 +21,7 @@ abstract class ApplicationTheme {
     brightness: Brightness.light,
     primary: Color.fromRGBO(183, 236, 239, 1.0),
     onPrimary: Color.fromRGBO(40, 42, 58, 1.0),
-    secondary: Color.fromRGBO(148, 150, 161, 1.0),
+    secondary: Color.fromRGBO(179, 181, 189, 1.0),
     onSecondary: Color.fromRGBO(64, 66, 82, 1.0),
     error: Colors.redAccent,
     onError: Colors.white70,
