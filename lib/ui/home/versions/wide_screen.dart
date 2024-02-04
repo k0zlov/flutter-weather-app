@@ -13,39 +13,44 @@ class WideScreenVersion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      child: Column(
-        children: [
-          AppBarWidget(),
-          SizedBox(height: 50),
-          Row(
+    return const Scaffold(
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 18),
+        child: SingleChildScrollView(
+          child: Column(
             children: [
-              Expanded(
-                flex: 2,
-                child: CustomContainer(height: 300, width: 200, child: WeatherDashboardWidget()),
+              AppBarWidget(),
+              SizedBox(height: 50),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: CustomContainer(height: 300, width: 200, child: WeatherDashboardWidget()),
+                  ),
+                  SizedBox(width: 30),
+                  Expanded(
+                    flex: 1,
+                    child: CustomContainer(height: 300, width: 200, child: WeatherMapWidget()),
+                  ),
+                ],
               ),
-              SizedBox(width: 30),
-              Expanded(
-                flex: 1,
-                child: CustomContainer(height: 300, width: 200, child: WeatherMapWidget()),
-              ),
+              SizedBox(height: 30),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: CustomContainer(height: 380, width: 200, child: WeatherChartWidget()),
+                  ),
+                  SizedBox(width: 30),
+                  Expanded(
+                    flex: 1,
+                    child: CustomContainer(height: 380, width: 200, child: WeatherForecastWidget()),
+                  ),
+                ],
+              )
             ],
           ),
-          SizedBox(height: 30),
-          Row(
-            children: [
-              Expanded(
-                flex: 2,
-                child: CustomContainer(height: 380, width: 200, child: WeatherChartWidget()),
-              ),
-              SizedBox(width: 30),
-              Expanded(
-                flex: 1,
-                child: CustomContainer(height: 380, width: 200, child: WeatherForecastWidget()),
-              ),
-            ],
-          )
-        ],
+        ),
       ),
     );
   }

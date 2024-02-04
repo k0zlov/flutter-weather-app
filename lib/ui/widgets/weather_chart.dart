@@ -14,9 +14,18 @@ class WeatherChartWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Overview',
-              style: Theme.of(context).textTheme.headlineLarge,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  'Overview',
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: WeeklyTextToolTip(),
+                )
+              ],
             ),
             const ChartDataPicker(),
           ],
@@ -31,6 +40,29 @@ class WeatherChartWidget extends StatelessWidget {
     );
   }
 }
+
+class WeeklyTextToolTip extends StatelessWidget {
+  const WeeklyTextToolTip({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: 'Each point on the graph is the average data for the week.',
+      textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.onSecondary),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Theme.of(context).colorScheme.secondary,
+      ),
+      child: Text(
+        'weekly',
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+        ),
+      ),
+    );
+  }
+}
+
 
 class ChartDataPicker extends StatefulWidget {
   const ChartDataPicker({super.key});
@@ -90,10 +122,10 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
                       child: Text(
                         'Humidity',
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: isHumidity
-                              ? Theme.of(context).colorScheme.onPrimary
-                              : Theme.of(context).colorScheme.onSecondary,
-                        ),
+                              color: isHumidity
+                                  ? Theme.of(context).colorScheme.onPrimary
+                                  : Theme.of(context).colorScheme.onSecondary,
+                            ),
                       ),
                     ),
                   ),
@@ -103,10 +135,10 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
                       child: Text(
                         'Pressure',
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: !isHumidity
-                              ? Theme.of(context).colorScheme.onPrimary
-                              : Theme.of(context).colorScheme.onSecondary,
-                        ),
+                              color: !isHumidity
+                                  ? Theme.of(context).colorScheme.onPrimary
+                                  : Theme.of(context).colorScheme.onSecondary,
+                            ),
                       ),
                     ),
                   ),
@@ -120,7 +152,6 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
   }
 }
 
-
 class Chart extends StatelessWidget {
   const Chart({super.key});
 
@@ -128,7 +159,7 @@ class Chart extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<FlSpot> items = List.generate(
       30 * 12 ~/ 7,
-          (index) => FlSpot(
+      (index) => FlSpot(
         index.toDouble(),
         Random().nextInt(101).toDouble(),
       ),
@@ -144,6 +175,8 @@ class Chart extends StatelessWidget {
     for (int i = 0; i < currentMonth; i++) {
       currentMonthsList.add(monthsList[i]);
     }
+
+    const String units = '%';
 
     return LineChart(LineChartData(
       lineBarsData: [
@@ -164,6 +197,20 @@ class Chart extends StatelessWidget {
           belowBarData: BarAreaData(show: false),
         ),
       ],
+      lineTouchData: LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          tooltipBgColor: Theme.of(context).colorScheme.secondary,
+          getTooltipItems: (value) {
+            return value
+                .map((e) => LineTooltipItem(
+                    'Average: ${e.y}$units',
+                    Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        )))
+                .toList();
+          },
+        ),
+      ),
       gridData: const FlGridData(
         show: true,
         drawVerticalLine: false,
@@ -174,7 +221,7 @@ class Chart extends StatelessWidget {
           drawBelowEverything: false,
           sideTitles: SideTitles(
             getTitlesWidget: (title, _) => Text(
-              title < 0 || title > 100 ? '' : '$title%',
+              title < 0 || title > 100 ? '' : '$title$units',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             interval: 10,
