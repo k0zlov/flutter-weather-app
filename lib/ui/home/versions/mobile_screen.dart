@@ -114,7 +114,6 @@ class WideAppBar extends StatelessWidget {
         const Icon(
           Icons.cloud,
           size: 130.0,
-          color: Colors.white,
         ),
         const SizedBox(width: 2.0),
         Text(
