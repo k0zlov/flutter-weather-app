@@ -9,9 +9,18 @@ class MobileWeatherForecastWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int currentDay = DateTime.now().weekday;
+    final List<String> currentDaysList = [];
+    for(int i = currentDay; i < daysList.length; i++) {
+      currentDaysList.add(daysList[i]);
+    }
+    for(int i = 0; i < currentDay; i++) {
+      currentDaysList.add(daysList[i]);
+    }
+    print(currentDaysList);
     final List<List<dynamic>> items = List.generate(
       10,
-      (index) => [index + 3, index - 3, daysList[index > 6 ? index - 6 : index], index],
+      (index) => [index + 3, index - 3, currentDaysList[index > 6 ? index - 7 : index], index],
     );
     return Container(
       decoration: BoxDecoration(

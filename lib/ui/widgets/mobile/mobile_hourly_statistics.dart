@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/ui/widgets/mobile_dividers.dart';
+import 'package:weather_app/ui/widgets/mobile/mobile_dividers.dart';
 import 'package:weather_app/ui/widgets/weather_dashboard.dart';
 
 class MobileHourlyStatistics extends StatelessWidget {

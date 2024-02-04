@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/ui/widgets/mobile_dividers.dart';
-import 'package:weather_app/ui/widgets/mobile_hourly_statistics.dart';
-import 'package:weather_app/ui/widgets/mobile_weather_chart.dart';
-import 'package:weather_app/ui/widgets/mobile_weather_forecast.dart';
+import 'package:weather_app/ui/widgets/mobile/mobile_dividers.dart';
+import 'package:weather_app/ui/widgets/mobile/mobile_hourly_statistics.dart';
+import 'package:weather_app/ui/widgets/mobile/mobile_nav_bar.dart';
+import 'package:weather_app/ui/widgets/mobile/mobile_weather_chart.dart';
+import 'package:weather_app/ui/widgets/mobile/mobile_weather_forecast.dart';
+import 'package:weather_app/ui/widgets/mobile/mobile_weather_map.dart';
 
 class MobileScreenVersion extends StatelessWidget {
   const MobileScreenVersion({super.key});
@@ -39,11 +41,14 @@ class MobileScreenVersion extends StatelessWidget {
                 SizedBox(height: 25),
                 MobileWeatherChart(),
                 SizedBox(height: 25),
+                MobileWeatherMap(),
+                SizedBox(height: 25),
               ],
             ),
           ),
         ),
       ),
+      bottomNavigationBar: const MobileBottomNavigationBar(),
     );
   }
 }

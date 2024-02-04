@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/ui/widgets/mobile_dividers.dart';
-import 'package:weather_app/ui/widgets/weather_chart.dart';
+import 'package:weather_app/ui/widgets/mobile/mobile_dividers.dart';
+import 'package:weather_app/ui/widgets/weather_map.dart';
 
-class MobileWeatherChart extends StatelessWidget {
-  const MobileWeatherChart({super.key});
+class MobileWeatherMap extends StatelessWidget {
+  const MobileWeatherMap({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +12,8 @@ class MobileWeatherChart extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         color: Theme.of(context).colorScheme.onBackground,
       ),
+      height: 250,
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-      height: 300,
-      width: double.infinity,
       child: Column(
         children: [
           Padding(
@@ -22,13 +21,13 @@ class MobileWeatherChart extends StatelessWidget {
             child: Row(
               children: [
                 Icon(
-                  Icons.area_chart,
+                  Icons.map,
                   size: 18,
                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
                 ),
                 const MobileVerticalDivider(),
                 Text(
-                  'Statistics chart',
+                  'Weather map',
                   style: Theme.of(context).textTheme.titleSmall!.copyWith(
                     color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
                   ),
@@ -37,11 +36,7 @@ class MobileWeatherChart extends StatelessWidget {
             ),
           ),
           const MobileHorizontalDivider(),
-          const ChartDataPicker(),
-          const Expanded(child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Chart(),
-          )),
+          const Expanded(child: WeatherMapWidget()),
         ],
       ),
     );

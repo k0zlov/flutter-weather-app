@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
       builder: (context, constraints) {
         if (constraints.maxWidth > 1150) {
           return const WideScreenVersion();
-        } else if(constraints.maxWidth > 905) {
+        } else if(constraints.maxWidth > 915) {
           return const RestrictedScreenVersion();
         } else {
           return const MobileScreenVersion();

@@ -77,7 +77,7 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
   @override
   Widget build(BuildContext context) {
     bool isMobileVersion() {
-      return MediaQuery.of(context).size.width < 905;
+      return MediaQuery.of(context).size.width < 915;
     }
 
     return MouseRegion(
@@ -184,7 +184,7 @@ class Chart extends StatelessWidget {
     const String units = '%';
 
     bool isMobileVersion() {
-      return MediaQuery.of(context).size.width < 905;
+      return MediaQuery.of(context).size.width < 915;
     }
 
     return LineChart(LineChartData(
