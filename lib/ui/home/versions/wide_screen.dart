@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app/ui/home/home_state.dart';
+import 'package:weather_app/ui/home/home_view_model.dart';
 import 'package:weather_app/ui/widgets/language_selector.dart';
 import 'package:weather_app/ui/widgets/search_field.dart';
 import 'package:weather_app/ui/widgets/theme_switch.dart';
@@ -56,7 +59,6 @@ class WideScreenVersion extends StatelessWidget {
   }
 }
 
-
 class CustomContainer extends StatelessWidget {
   const CustomContainer({super.key, required this.height, required this.width, required this.child});
 
@@ -79,26 +81,31 @@ class CustomContainer extends StatelessWidget {
   }
 }
 
-
 class AppBarWidget extends StatelessWidget {
   const AppBarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final HomeViewModel viewModel = context.read<HomeViewModel>();
+    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text('Mon, 15 May, 2023', style: Theme.of(context).textTheme.headlineLarge),
-        const SizedBox(
+        SizedBox(
           child: Row(
             children: [
-              SearchField(),
-              SizedBox(width: 20),
-              LanguageSelector(),
-              SizedBox(width: 20),
-              ThemeSwitch(),
-              SizedBox(width: 20),
-              UnitsSwitch(),
+              const SearchField(),
+              const SizedBox(width: 20),
+              const LanguageSelector(),
+              const SizedBox(width: 20),
+              const ThemeSwitch(),
+              const SizedBox(width: 20),
+              UnitsSwitch(
+                isFahrenheit: state.isFahrenheit,
+                onChange: () => viewModel.switchUnits(),
+              ),
             ],
           ),
         ),

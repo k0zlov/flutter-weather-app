@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 
 class UnitsSwitch extends StatefulWidget {
-  const UnitsSwitch({super.key});
+  const UnitsSwitch({super.key, required this.isFahrenheit, required this.onChange});
+
+  final bool isFahrenheit;
+  final void Function() onChange;
 
   @override
   State<UnitsSwitch> createState() => _UnitsSwitchState();
 }
 
 class _UnitsSwitchState extends State<UnitsSwitch> {
-  bool isF = false;
   bool isHovered = false;
+  late bool isFahrenheit;
 
-  void change() {
+  @override
+  void initState() {
+    super.initState();
+    isFahrenheit = widget.isFahrenheit;
+  }
+
+  void switchUnits() {
+    widget.onChange();
     setState(() {
-      isF = !isF;
+      isFahrenheit = !isFahrenheit;
     });
   }
 
@@ -27,7 +37,7 @@ class _UnitsSwitchState extends State<UnitsSwitch> {
         isHovered = false;
       }),
       child: GestureDetector(
-        onTap: () => change(),
+        onTap: () => switchUnits(),
         child: Container(
           height: 45,
           width: 100,
@@ -42,7 +52,7 @@ class _UnitsSwitchState extends State<UnitsSwitch> {
             child: Stack(
               children: [
                 AnimatedContainer(
-                  alignment: isF ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment: isFahrenheit ? Alignment.centerRight : Alignment.centerLeft,
                   duration: const Duration(milliseconds: 100),
                   child: Container(
                     width: 50,
@@ -62,7 +72,7 @@ class _UnitsSwitchState extends State<UnitsSwitch> {
                         child: Text(
                           'C°',
                           style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                color: isF
+                                color: isFahrenheit
                                     ? Theme.of(context).colorScheme.onSecondary
                                     : Theme.of(context).colorScheme.onPrimary,
                               ),
@@ -75,7 +85,7 @@ class _UnitsSwitchState extends State<UnitsSwitch> {
                         child: Text(
                           'F°',
                           style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                color: isF
+                                color: isFahrenheit
                                     ? Theme.of(context).colorScheme.onPrimary
                                     : Theme.of(context).colorScheme.onSecondary,
                               ),
