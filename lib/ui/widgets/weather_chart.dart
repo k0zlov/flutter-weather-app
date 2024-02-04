@@ -56,13 +56,12 @@ class WeeklyTextToolTip extends StatelessWidget {
       child: Text(
         'weekly',
         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-        ),
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+            ),
       ),
     );
   }
 }
-
 
 class ChartDataPicker extends StatefulWidget {
   const ChartDataPicker({super.key});
@@ -77,6 +76,10 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
 
   @override
   Widget build(BuildContext context) {
+    bool isMobileVersion() {
+      return MediaQuery.of(context).size.width < 905;
+    }
+
     return MouseRegion(
       onEnter: (_) => setState(() {
         isHovered = true;
@@ -89,8 +92,8 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
           isHumidity = !isHumidity;
         }),
         child: Container(
-          height: 50,
-          width: 200,
+          height: isMobileVersion() ? 35 : 50,
+          width: isMobileVersion() ? MediaQuery.of(context).size.width : 200,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: isHovered
@@ -108,8 +111,8 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
                     color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  height: 50,
-                  width: 100,
+                  height: isMobileVersion() ? 35 : 50,
+                  width: isMobileVersion() ? MediaQuery.of(context).size.width / 2 : 100,
                 ),
               ),
               Row(
@@ -122,6 +125,7 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
                       child: Text(
                         'Humidity',
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontSize: isMobileVersion() ? 12 : 18,
                               color: isHumidity
                                   ? Theme.of(context).colorScheme.onPrimary
                                   : Theme.of(context).colorScheme.onSecondary,
@@ -135,6 +139,7 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
                       child: Text(
                         'Pressure',
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              fontSize: isMobileVersion() ? 12 : 18,
                               color: !isHumidity
                                   ? Theme.of(context).colorScheme.onPrimary
                                   : Theme.of(context).colorScheme.onSecondary,
@@ -178,6 +183,10 @@ class Chart extends StatelessWidget {
 
     const String units = '%';
 
+    bool isMobileVersion() {
+      return MediaQuery.of(context).size.width < 905;
+    }
+
     return LineChart(LineChartData(
       lineBarsData: [
         LineChartBarData(
@@ -203,7 +212,7 @@ class Chart extends StatelessWidget {
           getTooltipItems: (value) {
             return value
                 .map((e) => LineTooltipItem(
-                    'Average: ${e.y}$units',
+                    '${(e.x.toInt() - 52) * -1} weeks ago\nAverage: ${e.y}$units',
                     Theme.of(context).textTheme.bodySmall!.copyWith(
                           color: Theme.of(context).colorScheme.onSecondary,
                         )))
@@ -222,10 +231,10 @@ class Chart extends StatelessWidget {
           sideTitles: SideTitles(
             getTitlesWidget: (title, _) => Text(
               title < 0 || title > 100 ? '' : '$title$units',
-              style: Theme.of(context).textTheme.bodyLarge,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: isMobileVersion() ? 10 : 16),
             ),
-            interval: 10,
-            reservedSize: 45,
+            interval: isMobileVersion() ? 20 : 10,
+            reservedSize: 40,
             showTitles: true,
           ),
         ),
@@ -246,7 +255,7 @@ class Chart extends StatelessWidget {
                 return const SizedBox();
               }
             },
-            interval: 4,
+            interval: isMobileVersion() ? 8 : 4,
             showTitles: true,
             reservedSize: 30,
           ),

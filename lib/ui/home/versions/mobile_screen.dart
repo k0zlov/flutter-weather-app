@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/ui/widgets/weather_dashboard.dart';
+import 'package:weather_app/ui/widgets/mobile_dividers.dart';
+import 'package:weather_app/ui/widgets/mobile_hourly_statistics.dart';
+import 'package:weather_app/ui/widgets/mobile_weather_chart.dart';
+import 'package:weather_app/ui/widgets/mobile_weather_forecast.dart';
 
 class MobileScreenVersion extends StatelessWidget {
   const MobileScreenVersion({super.key});
@@ -27,65 +30,18 @@ class MobileScreenVersion extends StatelessWidget {
         },
         body: const SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 14),
             child: Column(
               children: [
                 MobileHourlyStatistics(),
                 SizedBox(height: 25),
+                MobileWeatherForecastWidget(),
+                SizedBox(height: 25),
+                MobileWeatherChart(),
+                SizedBox(height: 25),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class MobileHourlyStatistics extends StatelessWidget {
-  const MobileHourlyStatistics({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final List<List<dynamic>> items = List.generate(24, (index) => ['$index°', Icons.cloud, '$index:00']);
-    return IntrinsicHeight(
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onBackground,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        padding: const EdgeInsets.all(4),
-        // height: 180,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
-              child: Text(
-                'Some weather description',
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-              child: Divider(thickness: 2, color: Theme.of(context).colorScheme.onSecondary.withOpacity(0.6)),
-            ),
-            SizedBox(
-              height: 120,
-              width: double.infinity,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  ...items.map(
-                    (e) => HourStatisticsBox(
-                      temperature: e[0],
-                      time: e[2],
-                      icon: e[1],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -130,28 +86,12 @@ class WideAppBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('H:11'),
-              CustomVerticalDivider(),
+              MobileVerticalDivider(),
               Text('L:26'),
             ],
           ),
         )
       ],
-    );
-  }
-}
-
-class CustomVerticalDivider extends StatelessWidget {
-  const CustomVerticalDivider({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: SizedBox(
-        width: 2,
-        height: 10,
-        child: ColoredBox(color: Theme.of(context).colorScheme.primary),
-      ),
     );
   }
 }
@@ -171,7 +111,6 @@ class CollapsedAppBar extends StatelessWidget {
             Icon(
               Icons.cloud,
               size: 130.0,
-              color: Colors.white,
             ),
           ],
         ),
@@ -193,7 +132,7 @@ class CollapsedAppBar extends StatelessWidget {
               child: const Row(
                 children: [
                   Text('23°'),
-                  CustomVerticalDivider(),
+                  MobileVerticalDivider(),
                   Text('Cloudy'),
                 ],
               ),
