@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:weather_app/domen/entities/geocoding_entity.dart';
+import 'package:weather_app/domen/entities/location_entity.dart';
+import 'package:weather_app/domen/entities/weather_entity.dart';
 import 'package:weather_app/domen/repositories/units_repository.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 
@@ -18,10 +21,48 @@ class HomeViewModel extends ChangeNotifier {
 
   void init() {
     _setSavedUnits();
+    _setSavedLocations();
   }
 
+  /// Locations
+  Future<void> _setSavedLocations() async {
+    final List<LocationEntity> newLocations = [];
+    final List<GeocodingEntity> savedGeocodingList = [GeocodingEntity.defaultData];
+    for (GeocodingEntity geocoding in savedGeocodingList) {
+      newLocations.add(
+        LocationEntity(
+          id: UniqueKey().hashCode,
+          currentWeather: WeatherEntity.defaultData,
+          weatherForecastList: List.generate(
+            10,
+            (index) => WeatherEntity.defaultData.copyWith(
+              dateTime: WeatherEntity.defaultData.dateTime.copyWith(
+                day: WeatherEntity.defaultData.dateTime.day + index + 1,
+              ),
+              maxTemperature: index + 3,
+              minTemperature: index - 3,
+            ),
+          ),
+          geocoding: geocoding,
+        ),
+      );
+    }
+    _state = _state.copyWith(locations: [..._state.locations, ...newLocations], currentLocation: newLocations[0].id);
+    notifyListeners();
+  }
+
+  Future<void> setLocation() async {
+
+  }
+
+  /// Chart data
+  void switchChartData() {
+    _state = _state.copyWith(isPressure: !_state.isPressure);
+    notifyListeners();
+  }
+
+  /// Units
   Future<void> switchUnits() async {
-    print(_state.isFahrenheit);
     await _unitsRepository.setFahrenheitBool(isFahrenheit: !_state.isFahrenheit);
     _state = _state.copyWith(isFahrenheit: !_state.isFahrenheit);
     notifyListeners();

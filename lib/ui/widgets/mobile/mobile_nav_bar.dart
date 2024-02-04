@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/ui/home/home_state.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
 import 'package:weather_app/ui/widgets/language_selector.dart';
 import 'package:weather_app/ui/widgets/theme_switch.dart';
@@ -12,7 +11,6 @@ class MobileBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HomeViewModel viewModel = context.read<HomeViewModel>();
-    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
 
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
@@ -37,8 +35,10 @@ class MobileBottomNavigationBar extends StatelessWidget {
                 showModalBottomSheet(
                     context: context,
                     builder: (context) {
-                      return SettingsBottomSheet(
-                          isFahrenheit: state.isFahrenheit, onChange: () => viewModel.switchUnits());
+                      return ChangeNotifierProvider.value(
+                        value: viewModel,
+                        child: SettingsBottomSheet(),
+                      );
                     });
               },
             ),
@@ -54,10 +54,7 @@ class MobileBottomNavigationBar extends StatelessWidget {
 }
 
 class SettingsBottomSheet extends StatelessWidget {
-  const SettingsBottomSheet({super.key, required this.isFahrenheit, required this.onChange});
-
-  final bool isFahrenheit;
-  final void Function() onChange;
+  const SettingsBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,12 +72,9 @@ class SettingsBottomSheet extends StatelessWidget {
         children: [
           Text('Settings', style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 10),
-          SettingsParameter(
+          const SettingsParameter(
             title: 'Units',
-            child: UnitsSwitch(
-              isFahrenheit: isFahrenheit,
-              onChange: () => onChange(),
-            ),
+            child: UnitsSwitch(),
           ),
           const SizedBox(height: 10),
           const SettingsParameter(title: 'Theme', child: ThemeSwitch()),

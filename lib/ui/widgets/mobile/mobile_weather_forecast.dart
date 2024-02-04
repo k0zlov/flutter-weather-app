@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/constants/constants.dart';
+import 'package:weather_app/domen/entities/location_entity.dart';
+import 'package:weather_app/domen/entities/weather_entity.dart';
+import 'package:weather_app/ui/home/home_state.dart';
+import 'package:weather_app/ui/home/home_view_model.dart';
+import 'package:weather_app/utils/temperature_converter.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 import 'mobile_dividers.dart';
@@ -9,19 +15,13 @@ class MobileWeatherForecastWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int currentDay = DateTime.now().weekday;
-    final List<String> currentDaysList = [];
-    for(int i = currentDay; i < daysList.length; i++) {
-      currentDaysList.add(daysList[i]);
-    }
-    for(int i = 0; i < currentDay; i++) {
-      currentDaysList.add(daysList[i]);
-    }
-    print(currentDaysList);
-    final List<List<dynamic>> items = List.generate(
-      10,
-      (index) => [index + 3, index - 3, currentDaysList[index > 6 ? index - 7 : index], index],
-    );
+    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
+
+    final LocationEntity currentLocation =
+        state.locations.singleWhere((location) => location.id == state.currentLocation);
+
+    final List<WeatherEntity> weatherForecastList = currentLocation.weatherForecastList;
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -52,7 +52,16 @@ class MobileWeatherForecastWidget extends StatelessWidget {
             ),
           ),
           const MobileHorizontalDivider(),
-          ...items.map((e) => DayForecastWidget(minTemp: e[1], maxTemp: e[0], day: e[2], hasDivider: e[3] != 9,)),
+          ...weatherForecastList.map(
+            (e) => DayForecastWidget(
+              minTemp:
+                  state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.minTemperature) : e.minTemperature,
+              maxTemp:
+                  state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.maxTemperature) : e.maxTemperature,
+              day: '${e.dateTime.day} ${daysList[e.dateTime.weekday - 1]}',
+              hasDivider: weatherForecastList[9] != e,
+            ),
+          ),
         ],
       ),
     );
@@ -60,7 +69,8 @@ class MobileWeatherForecastWidget extends StatelessWidget {
 }
 
 class DayForecastWidget extends StatelessWidget {
-  const DayForecastWidget({super.key, required this.maxTemp, required this.minTemp, required this.day, required this.hasDivider});
+  const DayForecastWidget(
+      {super.key, required this.maxTemp, required this.minTemp, required this.day, required this.hasDivider});
 
   final int maxTemp;
   final int minTemp;

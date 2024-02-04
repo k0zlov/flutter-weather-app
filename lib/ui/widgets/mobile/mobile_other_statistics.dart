@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app/domen/entities/location_entity.dart';
+import 'package:weather_app/domen/entities/weather_entity.dart';
+import 'package:weather_app/ui/home/home_state.dart';
+import 'package:weather_app/ui/home/home_view_model.dart';
 import 'package:weather_app/ui/widgets/mobile/mobile_dividers.dart';
 
 class MobileOtherStatistics extends StatelessWidget {
@@ -6,16 +11,23 @@ class MobileOtherStatistics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
+
+    final LocationEntity currentLocation =
+    state.locations.singleWhere((location) => location.id == state.currentLocation);
+
+    final WeatherEntity currentWeather = currentLocation.currentWeather;
+
+    return Row(
       children: [
         Expanded(
           flex: 1,
-          child: MobileCustomContainer(title: 'Wind speed', value: '13 km/h', iconData: Icons.wind_power),
+          child: MobileCustomContainer(title: 'Wind speed', value: '${currentWeather.windSpeed} km/h', iconData: Icons.wind_power),
         ),
-        SizedBox(width: 15),
+        const SizedBox(width: 15),
         Expanded(
           flex: 1,
-          child: MobileCustomContainer(title: 'Humidity', value: '34%', iconData: Icons.water_drop_rounded),
+          child: MobileCustomContainer(title: 'Humidity', value: '${currentWeather.humidity}%', iconData: Icons.water_drop_rounded),
         ),
       ],
     );

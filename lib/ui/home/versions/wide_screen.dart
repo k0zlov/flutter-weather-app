@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:weather_app/ui/home/home_state.dart';
-import 'package:weather_app/ui/home/home_view_model.dart';
+import 'package:weather_app/constants/constants.dart';
 import 'package:weather_app/ui/widgets/language_selector.dart';
 import 'package:weather_app/ui/widgets/search_field.dart';
 import 'package:weather_app/ui/widgets/theme_switch.dart';
@@ -86,26 +84,25 @@ class AppBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeViewModel viewModel = context.read<HomeViewModel>();
-    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
+    final DateTime now = DateTime.now();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text('Mon, 15 May, 2023', style: Theme.of(context).textTheme.headlineLarge),
-        SizedBox(
+        Text(
+          '${daysList[now.weekday - 1]}, ${now.day} ${monthsList[now.month - 1]}, ${now.year}',
+          style: Theme.of(context).textTheme.headlineLarge,
+        ),
+        const SizedBox(
           child: Row(
             children: [
-              const SearchField(),
-              const SizedBox(width: 20),
-              const LanguageSelector(),
-              const SizedBox(width: 20),
-              const ThemeSwitch(),
-              const SizedBox(width: 20),
-              UnitsSwitch(
-                isFahrenheit: state.isFahrenheit,
-                onChange: () => viewModel.switchUnits(),
-              ),
+              SearchField(),
+              SizedBox(width: 20),
+              LanguageSelector(),
+              SizedBox(width: 20),
+              ThemeSwitch(),
+              SizedBox(width: 20),
+              UnitsSwitch(),
             ],
           ),
         ),

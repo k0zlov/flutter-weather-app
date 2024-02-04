@@ -1,34 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app/ui/home/home_state.dart';
+import 'package:weather_app/ui/home/home_view_model.dart';
 
 class UnitsSwitch extends StatefulWidget {
-  const UnitsSwitch({super.key, required this.isFahrenheit, required this.onChange});
-
-  final bool isFahrenheit;
-  final void Function() onChange;
-
+  const UnitsSwitch({super.key});
   @override
   State<UnitsSwitch> createState() => _UnitsSwitchState();
 }
 
 class _UnitsSwitchState extends State<UnitsSwitch> {
   bool isHovered = false;
-  late bool isFahrenheit;
-
-  @override
-  void initState() {
-    super.initState();
-    isFahrenheit = widget.isFahrenheit;
-  }
-
-  void switchUnits() {
-    widget.onChange();
-    setState(() {
-      isFahrenheit = !isFahrenheit;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+    final HomeViewModel viewModel = context.read<HomeViewModel>();
+    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
+
     return MouseRegion(
       onEnter: (_) => setState(() {
         isHovered = true;
@@ -37,7 +25,7 @@ class _UnitsSwitchState extends State<UnitsSwitch> {
         isHovered = false;
       }),
       child: GestureDetector(
-        onTap: () => switchUnits(),
+        onTap: () => viewModel.switchUnits(),
         child: Container(
           height: 45,
           width: 100,
@@ -52,7 +40,7 @@ class _UnitsSwitchState extends State<UnitsSwitch> {
             child: Stack(
               children: [
                 AnimatedContainer(
-                  alignment: isFahrenheit ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment: state.isFahrenheit ? Alignment.centerRight : Alignment.centerLeft,
                   duration: const Duration(milliseconds: 100),
                   child: Container(
                     width: 50,
@@ -72,7 +60,7 @@ class _UnitsSwitchState extends State<UnitsSwitch> {
                         child: Text(
                           'C°',
                           style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                color: isFahrenheit
+                                color: state.isFahrenheit
                                     ? Theme.of(context).colorScheme.onSecondary
                                     : Theme.of(context).colorScheme.onPrimary,
                               ),
@@ -85,7 +73,7 @@ class _UnitsSwitchState extends State<UnitsSwitch> {
                         child: Text(
                           'F°',
                           style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                color: isFahrenheit
+                                color: state.isFahrenheit
                                     ? Theme.of(context).colorScheme.onPrimary
                                     : Theme.of(context).colorScheme.onSecondary,
                               ),

@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app/constants/constants.dart';
+import 'package:weather_app/domen/entities/location_entity.dart';
+import 'package:weather_app/domen/entities/weather_entity.dart';
+import 'package:weather_app/ui/home/home_state.dart';
+import 'package:weather_app/ui/home/home_view_model.dart';
+import 'package:weather_app/utils/temperature_converter.dart';
 
 class WeatherForecastWidget extends StatelessWidget {
   const WeatherForecastWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<List<dynamic>> items = List.generate(
-      5,
-      (index) => [Icons.cloud, '${index + 5}°', '${index - 5}°', '${index + 3}', 'May, Wed'],
-    );
+    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
+
+    final LocationEntity currentLocation =
+        state.locations.singleWhere((location) => location.id == state.currentLocation);
+
+    final List<WeatherEntity> weatherForecastList = currentLocation.weatherForecastList;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -18,13 +27,17 @@ class WeatherForecastWidget extends StatelessWidget {
         Expanded(
           child: ListView(
             children: [
-              ...items.map(
+              ...weatherForecastList.map(
                 (e) => ForecastDayWidget(
-                  icon: e[0],
-                  minTemp: e[2],
-                  maxTemp: e[1],
-                  day: e[3],
-                  date: e[4],
+                  icon: Icons.cloud,
+                  minTemp: state.isFahrenheit
+                      ? TemperatureConverter.celsiusToFahrenheit(e.minTemperature)
+                      : e.minTemperature,
+                  maxTemp: state.isFahrenheit
+                      ? TemperatureConverter.celsiusToFahrenheit(e.maxTemperature)
+                      : e.maxTemperature,
+                  day: e.dateTime.day,
+                  date: '${monthsList[e.dateTime.month - 1]}, ${daysList[e.dateTime.weekday - 1]}',
                 ),
               )
             ],
@@ -46,9 +59,9 @@ class ForecastDayWidget extends StatefulWidget {
   });
 
   final IconData icon;
-  final String minTemp;
-  final String maxTemp;
-  final String day;
+  final int minTemp;
+  final int maxTemp;
+  final int day;
   final String date;
 
   @override
@@ -90,10 +103,10 @@ class _ForecastDayWidgetState extends State<ForecastDayWidget> {
                   children: [
                     Icon(widget.icon, size: 40),
                     const SizedBox(width: 12),
-                    Text(widget.maxTemp),
+                    Text('${widget.maxTemp}°'),
                     const SizedBox(width: 2),
                     Text(
-                      '/ ${widget.minTemp}',
+                      '/ ${widget.minTemp}°',
                       style: Theme.of(context)
                           .textTheme
                           .headlineSmall!
@@ -104,7 +117,7 @@ class _ForecastDayWidgetState extends State<ForecastDayWidget> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(widget.day),
+                    Text(widget.day.toString()),
                     const SizedBox(width: 2),
                     Text(
                       widget.date,

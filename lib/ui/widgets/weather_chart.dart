@@ -1,8 +1,12 @@
-import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/constants/constants.dart';
+import 'package:weather_app/domen/entities/location_entity.dart';
+import 'package:weather_app/domen/entities/weather_entity.dart';
+import 'package:weather_app/ui/home/home_state.dart';
+import 'package:weather_app/ui/home/home_view_model.dart';
 
 class WeatherChartWidget extends StatelessWidget {
   const WeatherChartWidget({super.key});
@@ -72,13 +76,15 @@ class ChartDataPicker extends StatefulWidget {
 
 class _ChartDataPickerState extends State<ChartDataPicker> {
   bool isHovered = false;
-  bool isHumidity = true;
 
   @override
   Widget build(BuildContext context) {
     bool isMobileVersion() {
       return MediaQuery.of(context).size.width < 915;
     }
+
+    final HomeViewModel viewModel = context.read<HomeViewModel>();
+    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
 
     return MouseRegion(
       onEnter: (_) => setState(() {
@@ -88,9 +94,7 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
         isHovered = false;
       }),
       child: GestureDetector(
-        onTap: () => setState(() {
-          isHumidity = !isHumidity;
-        }),
+        onTap: () => viewModel.switchChartData(),
         child: Container(
           height: isMobileVersion() ? 35 : 50,
           width: isMobileVersion() ? MediaQuery.of(context).size.width : 200,
@@ -105,7 +109,7 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
             children: [
               AnimatedAlign(
                 duration: const Duration(milliseconds: 100),
-                alignment: isHumidity ? Alignment.centerLeft : Alignment.centerRight,
+                alignment: state.isPressure ? Alignment.centerRight : Alignment.centerLeft,
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.primary,
@@ -126,7 +130,7 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
                         'Humidity',
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(
                               fontSize: isMobileVersion() ? 12 : 18,
-                              color: isHumidity
+                              color: !state.isPressure
                                   ? Theme.of(context).colorScheme.onPrimary
                                   : Theme.of(context).colorScheme.onSecondary,
                             ),
@@ -140,7 +144,7 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
                         'Pressure',
                         style: Theme.of(context).textTheme.titleMedium!.copyWith(
                               fontSize: isMobileVersion() ? 12 : 18,
-                              color: !isHumidity
+                              color: state.isPressure
                                   ? Theme.of(context).colorScheme.onPrimary
                                   : Theme.of(context).colorScheme.onSecondary,
                             ),
@@ -162,14 +166,24 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
+
+    final LocationEntity currentLocation =
+        state.locations.singleWhere((location) => location.id == state.currentLocation);
+
+    final WeatherEntity currentWeather = currentLocation.currentWeather;
+
     final List<FlSpot> items = List.generate(
       30 * 12 ~/ 7,
       (index) => FlSpot(
         index.toDouble(),
-        Random().nextInt(101).toDouble(),
+        state.isPressure
+            ? currentWeather.pressureLastYear[index].toDouble()
+            : currentWeather.humidityLastYear[index].toDouble(),
       ),
     );
 
+    /// Months logic
     final int currentMonth = DateTime.now().month;
     final List<String> currentMonthsList = [];
 
@@ -181,7 +195,7 @@ class Chart extends StatelessWidget {
       currentMonthsList.add(monthsList[i]);
     }
 
-    const String units = '%';
+    final String units = state.isPressure ? 'hPa' : '%';
 
     bool isMobileVersion() {
       return MediaQuery.of(context).size.width < 915;
@@ -210,8 +224,8 @@ class Chart extends StatelessWidget {
         touchTooltipData: LineTouchTooltipData(
           tooltipBgColor: Theme.of(context).colorScheme.secondary,
           fitInsideHorizontally: true,
-          fitInsideVertically: isMobileVersion(),
-          showOnTopOfTheChartBoxArea: true,
+          fitInsideVertically: true,
+          showOnTopOfTheChartBoxArea: isMobileVersion(),
           getTooltipItems: (value) {
             return value
                 .map((e) => LineTooltipItem(
@@ -233,11 +247,11 @@ class Chart extends StatelessWidget {
           drawBelowEverything: false,
           sideTitles: SideTitles(
             getTitlesWidget: (title, _) => Text(
-              title < 0 || title > 100 ? '' : '$title$units',
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: isMobileVersion() ? 10 : 16),
+              title < 0 || title > 100 ? '' : '$title $units',
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: isMobileVersion() ? 12 : 16),
             ),
             interval: isMobileVersion() ? 20 : 10,
-            reservedSize: 40,
+            reservedSize: state.isPressure ? 65 : 45,
             showTitles: true,
           ),
         ),
