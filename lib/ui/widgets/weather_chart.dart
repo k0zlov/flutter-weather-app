@@ -209,6 +209,9 @@ class Chart extends StatelessWidget {
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
           tooltipBgColor: Theme.of(context).colorScheme.secondary,
+          fitInsideHorizontally: true,
+          fitInsideVertically: isMobileVersion(),
+          showOnTopOfTheChartBoxArea: true,
           getTooltipItems: (value) {
             return value
                 .map((e) => LineTooltipItem(

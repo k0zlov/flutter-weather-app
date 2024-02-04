@@ -57,6 +57,7 @@ class SettingsBottomSheet extends StatelessWidget {
         color: Theme.of(context).colorScheme.background,
       ),
       height: 320,
+      width: double.infinity,
       padding: const EdgeInsets.all(12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
