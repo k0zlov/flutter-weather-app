@@ -12,7 +12,7 @@ class MobileWeatherMap extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         color: Theme.of(context).colorScheme.onBackground,
       ),
-      height: 250,
+      height: 430,
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
       child: Column(
         children: [

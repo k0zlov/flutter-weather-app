@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/domen/entities/hour_forecast_entity.dart';
+import 'package:weather_app/domen/entities/weather_hour_entity.dart';
 import 'package:weather_app/domen/entities/location_entity.dart';
 import 'package:weather_app/domen/entities/weather_entity.dart';
 import 'package:weather_app/ui/home/home_state.dart';
@@ -17,7 +17,7 @@ class WeatherDashboardWidget extends StatelessWidget {
     final LocationEntity currentLocation =
         state.locations.singleWhere((location) => location.id == state.currentLocation);
 
-    final List<HourForecastEntity> hourlyForecastList = currentLocation.currentWeather.hourlyForecast;
+    final List<WeatherHourEntity> hourlyForecastList = currentLocation.currentWeather.hourlyForecast;
     return Column(
       children: [
         DefaultTextStyle(

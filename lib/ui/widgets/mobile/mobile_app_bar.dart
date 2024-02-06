@@ -70,7 +70,11 @@ class WideAppBar extends StatelessWidget {
               Text('L:$minTemperature°'),
             ],
           ),
-        )
+        ),
+        Text(
+          'Updated ${currentWeather.dateTime.day} ${daysList[currentWeather.dateTime.weekday]} ${currentWeather.dateTime.hour}:${currentWeather.dateTime.minute}',
+          style: Theme.of(context).textTheme.bodyLarge!,
+        ),
       ],
     );
   }
@@ -91,7 +95,6 @@ class CollapsedAppBar extends StatelessWidget {
     final int temperature = state.isFahrenheit
         ? TemperatureConverter.celsiusToFahrenheit(currentWeather.temperature)
         : currentWeather.temperature;
-
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

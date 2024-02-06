@@ -1,21 +1,43 @@
 import 'dart:convert';
 
 import 'package:weather_app/constants/constants.dart';
-import 'package:weather_app/data/models/hour_forecast_model.dart';
+import 'package:weather_app/data/models/day_forecast_model.dart';
+import 'package:weather_app/data/models/weather_hour_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/weather_model.dart';
 
 class WeatherDataProvider {
-  Future<Map<String, dynamic>> getWeekStatistics({required double lat, required double lon, required int fromUnixDate}) async {
+  Future<List<DayForecastModel>?> getDailyForecast(
+      {required double lat, required double lon, required int amountOfDays}) async {
     final uri = Uri.parse(
-        'https://history.openweathermap.org/data/2.5/history/city?lat=$lat&lon=$lon&type=hour&start=$fromUnixDate&appid=$apiKey&cnt=168');
+        'https://api.openweathermap.org/data/2.5/forecast/daily?lat=$lat&lon=$lon&cnt=$amountOfDays&appid=$apiKey&units=metric');
+    final response = await http.get(uri);
+    final jsonBody = jsonDecode(response.body);
+
+    if (response.statusCode == 200 && jsonBody != null && jsonBody.isNotEmpty) {
+      final List<DayForecastModel> dayForecastList = [];
+
+      for (final day in jsonBody['list']) {
+        dayForecastList.add(DayForecastModel.fromJson(day));
+      }
+
+      return dayForecastList;
+    } else {
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>> getWeekStatistics(
+      {required double lat, required double lon, required int fromUnixDate}) async {
+    final uri = Uri.parse(
+        'https://history.openweathermap.org/data/2.5/history/city?lat=$lat&lon=$lon&type=hour&start=$fromUnixDate&appid=$apiKey&cnt=168&units=metric');
     final response = await http.get(uri);
     final jsonBody = jsonDecode(response.body);
     if (response.statusCode == 200 && jsonBody != null && jsonBody.isNotEmpty) {
       final List<int> weekPressure = [];
       final List<int> weekHumidity = [];
-      for(final hour in jsonBody['list']) {
+      for (final hour in jsonBody['list']) {
         weekPressure.add(hour['main']['pressure']);
         weekHumidity.add(hour['main']['humidity']);
       }
@@ -25,52 +47,17 @@ class WeatherDataProvider {
     }
   }
 
-  /// DEPRECATED
-  Future<List<int>> getWeekPressureFromDate({required double lat, required double lon, required int fromUnixDate}) async {
-    final uri = Uri.parse(
-        'https://history.openweathermap.org/data/2.5/history/city?lat=$lat&lon=$lon&type=hour&start=$fromUnixDate&appid=$apiKey&cnt=168');
-    final response = await http.get(uri);
-    final jsonBody = jsonDecode(response.body);
-    if (response.statusCode == 200 && jsonBody != null && jsonBody.isNotEmpty) {
-      final List<int> weekPressure = [];
-      for(final hour in jsonBody['list']) {
-        weekPressure.add(hour['main']['pressure']);
-      }
-      return weekPressure;
-    } else {
-      return [];
-    }
-  }
-
-  /// DEPRECATED
-  Future<List<int>> getWeekHumidityFromDate({required double lat, required double lon, required int fromUnixDate}) async {
-    final uri = Uri.parse(
-        'https://history.openweathermap.org/data/2.5/history/city?lat=$lat&lon=$lon&type=hour&start=$fromUnixDate&appid=$apiKey&cnt=168');
-    final response = await http.get(uri);
-    final jsonBody = jsonDecode(response.body);
-    if (response.statusCode == 200 && jsonBody != null && jsonBody.isNotEmpty) {
-      final List<int> weekHumidity = [];
-      for(final hour in jsonBody['list']) {
-        weekHumidity.add(hour['main']['humidity']);
-      }
-      return weekHumidity;
-    } else {
-      return [];
-    }
-  }
-
-  Future<List<HourForecastModel>?> getHourlyForecast(
-      {required double lat, required double lon, required amount}) async {
+  Future<List<WeatherHourModel>?> getHourlyForecast({required double lat, required double lon, required amount}) async {
     final uri = Uri.parse(
         'https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=$lat&lon=$lon&appid=$apiKey&units=metric&cnt=$amount');
     final response = await http.get(uri);
     final jsonBody = jsonDecode(response.body);
 
     if (response.statusCode == 200 && jsonBody != null && jsonBody.isNotEmpty) {
-      final List<HourForecastModel> hourlyData = [];
+      final List<WeatherHourModel> hourlyData = [];
 
       for (final hour in jsonBody['list']) {
-        hourlyData.add(HourForecastModel.fromJson(hour));
+        hourlyData.add(WeatherHourModel.fromJson(hour));
       }
       return hourlyData;
     } else {
@@ -86,8 +73,7 @@ class WeatherDataProvider {
     final jsonBody = jsonDecode(response.body);
 
     if (response.statusCode == 200 && jsonBody != null && jsonBody.isNotEmpty) {
-      final List<HourForecastModel> hourlyForecast =
-          await getHourlyForecast(lat: lat, lon: lon, amount: hourlyForecastAmount) ?? [];
+      final List<WeatherHourModel> hourlyForecast = await getHourlyForecast(lat: lat, lon: lon, amount: 24) ?? [];
 
       return WeatherModel.fromJson(jsonBody).copyWith(hourlyForecast: hourlyForecast);
     } else {

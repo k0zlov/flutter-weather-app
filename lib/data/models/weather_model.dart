@@ -1,4 +1,4 @@
-import 'package:weather_app/data/models/hour_forecast_model.dart';
+import 'package:weather_app/data/models/weather_hour_model.dart';
 
 class WeatherModel {
   final double? temperature;
@@ -7,10 +7,9 @@ class WeatherModel {
   final double? minTemperature;
   final int? humidity;
   final double? windSpeed;
-  final List<HourForecastModel>? hourlyForecast;
+  final List<WeatherHourModel>? hourlyForecast;
   final String? icon;
   final String? description;
-  final String? map;
 
   const WeatherModel({
     required this.temperature,
@@ -22,7 +21,6 @@ class WeatherModel {
     required this.hourlyForecast,
     required this.icon,
     required this.description,
-    required this.map,
   });
 
   static const nullData = WeatherModel(
@@ -35,7 +33,6 @@ class WeatherModel {
     hourlyForecast: null,
     icon: null,
     description: null,
-    map: null,
   );
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
@@ -53,7 +50,6 @@ class WeatherModel {
       hourlyForecast: [],
       icon: weatherData['icon'],
       description: weatherData['description'],
-      map: '',
     );
   }
 
@@ -64,10 +60,9 @@ class WeatherModel {
     double? minTemperature,
     int? humidity,
     double? windSpeed,
-    List<HourForecastModel>? hourlyForecast,
+    List<WeatherHourModel>? hourlyForecast,
     String? icon,
     String? description,
-    String? map,
   }) {
     return WeatherModel(
       temperature: temperature ?? this.temperature,
@@ -79,7 +74,6 @@ class WeatherModel {
       hourlyForecast: hourlyForecast ?? this.hourlyForecast,
       icon: icon ?? this.icon,
       description: description ?? this.description,
-      map: map ?? this.map,
     );
   }
 }

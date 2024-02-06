@@ -36,37 +36,28 @@ class HomeViewModel extends ChangeNotifier {
 
     for (GeocodingEntity geocoding in savedGeocodingList) {
       final WeatherEntity weather = await _weatherRepository.getCurrentWeather(geocoding: geocoding);
+      final List<DayForecastEntity> dailyForecast = await _weatherRepository.getDailyForecast(geocoding: geocoding);
+
       newLocations.add(
         LocationEntity(
           id: UniqueKey().hashCode,
           currentWeather: weather,
           pressureLastYear: [],
           humidityLastYear: [],
-          weatherForecastList: List.generate(
-            10,
-            (index) => DayForecastEntity(
-              maxTemperature: index + 3,
-              minTemperature: index - 3,
-              dateTime: DateTime.now().copyWith(day: DateTime.now().day + index + 1),
-              icon: '03n',
-            ),
-          ),
+          weatherForecastList: dailyForecast,
           geocoding: geocoding,
         ),
       );
     }
     _state = _state.copyWith(locations: [..._state.locations, ...newLocations], currentLocation: newLocations[0].id);
     notifyListeners();
-    await _loadAllLocationsChartStatistics();
-  }
 
-  Future<void> _loadAllLocationsChartStatistics() async {
     for (LocationEntity location in state.locations) {
-      await loadChartStatistics(id: location.id);
+      await loadLocationChartStatistics(id: location.id);
     }
   }
 
-  Future<void> loadChartStatistics({required int id}) async {
+  Future<void> loadLocationChartStatistics({required int id}) async {
     final List<LocationEntity> newLocations = [];
     for (LocationEntity location in state.locations) {
       if (location.id == id) {

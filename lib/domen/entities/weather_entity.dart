@@ -1,4 +1,4 @@
-import 'package:weather_app/domen/entities/hour_forecast_entity.dart';
+import 'package:weather_app/domen/entities/weather_hour_entity.dart';
 
 import '../../data/models/weather_model.dart';
 
@@ -9,16 +9,14 @@ class WeatherEntity {
   final int minTemperature;
   final String humidity;
   final String windSpeed;
-  final List<HourForecastEntity> hourlyForecast;
+  final List<WeatherHourEntity> hourlyForecast;
   final String icon;
   final String description;
 
   @override
   String toString() {
-    return 'WeatherEntity{temperature: $temperature, dateTime: $dateTime, maxTemperature: $maxTemperature, minTemperature: $minTemperature, humidity: $humidity, windSpeed: $windSpeed, hourlyForecast: $hourlyForecast, icon: $icon, description: $description, map: $map}';
+    return 'WeatherEntity{temperature: $temperature, dateTime: $dateTime, maxTemperature: $maxTemperature, minTemperature: $minTemperature, humidity: $humidity, windSpeed: $windSpeed, hourlyForecast: $hourlyForecast, icon: $icon, description: $description}';
   }
-
-  final String map;
 
   factory WeatherEntity.fromModel(WeatherModel model) {
     return WeatherEntity(
@@ -28,10 +26,10 @@ class WeatherEntity {
       minTemperature: model.minTemperature?.toInt() ?? 0,
       humidity: model.humidity?.toString() ?? 'No data',
       windSpeed: model.windSpeed?.toString() ?? 'No data',
-      hourlyForecast: model.hourlyForecast?.map((hourModel) => HourForecastEntity.fromModel(hourModel)).toList() ??
+      hourlyForecast: model.hourlyForecast?.map((hourModel) => WeatherHourEntity.fromModel(hourModel)).toList() ??
           List.generate(
             24,
-            (index) => HourForecastEntity(
+            (index) => WeatherHourEntity(
               dateTime: DateTime.now(),
               temperature: index,
               icon: '03n',
@@ -39,7 +37,6 @@ class WeatherEntity {
           ),
       icon: model.icon ?? '03n',
       description: model.description ?? 'No data',
-      map: model.map ?? 'No data',
     );
   }
 
@@ -53,7 +50,6 @@ class WeatherEntity {
     required this.hourlyForecast,
     required this.icon,
     required this.description,
-    required this.map,
   });
 
   @override
@@ -69,8 +65,7 @@ class WeatherEntity {
           windSpeed == other.windSpeed &&
           hourlyForecast == other.hourlyForecast &&
           icon == other.icon &&
-          description == other.description &&
-          map == other.map;
+          description == other.description;
 
   @override
   int get hashCode =>
@@ -82,6 +77,5 @@ class WeatherEntity {
       windSpeed.hashCode ^
       hourlyForecast.hashCode ^
       icon.hashCode ^
-      description.hashCode ^
-      map.hashCode;
+      description.hashCode;
 }
