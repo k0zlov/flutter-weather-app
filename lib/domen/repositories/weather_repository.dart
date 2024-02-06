@@ -13,7 +13,7 @@ class WeatherRepository {
     final List<DayForecastModel> dailyForecast = await _weatherDataProvider.getDailyForecast(
       lat: geocoding.lat,
       lon: geocoding.lon,
-      amountOfDays: 16,
+      amountOfDays: 10,
     ) ?? [];
 
     return [...dailyForecast.map((model) => DayForecastEntity.fromModel(model))];
