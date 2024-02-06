@@ -19,19 +19,16 @@ class WeatherMapWidget extends StatelessWidget {
     final lat = currentLocation.geocoding.lat;
     final lon = currentLocation.geocoding.lon;
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: FlutterMap(
-        options: MapOptions(initialCenter: LatLng(lat, lon), initialZoom: 4),
-        children: [
-          TileLayer(
-            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          ),
-          TileLayer(
-            urlTemplate: 'http://maps.openweathermap.org/maps/2.0/weather/PA0/{z}/{x}/{y}?date=1552861800&appid=$apiKey',
-          )
-        ],
-      ),
+    return FlutterMap(
+      options: MapOptions(initialCenter: LatLng(lat, lon), initialZoom: 6),
+      children: [
+        TileLayer(
+          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        ),
+        TileLayer(
+          urlTemplate: 'http://maps.openweathermap.org/maps/2.0/weather/PA0/{z}/{x}/{y}?date=1552861800&appid=$apiKey',
+        )
+      ],
     );
   }
 }

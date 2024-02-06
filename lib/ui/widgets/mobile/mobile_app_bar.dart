@@ -32,6 +32,9 @@ class WideAppBar extends StatelessWidget {
         ? TemperatureConverter.celsiusToFahrenheit(currentWeather.temperature)
         : currentWeather.temperature;
 
+    final String formattedHour = currentWeather.dateTime.hour.toString().padLeft(2, '0');
+    final String formattedMinute = currentWeather.dateTime.minute.toString().padLeft(2, '0');
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -72,8 +75,8 @@ class WideAppBar extends StatelessWidget {
           ),
         ),
         Text(
-          'Updated ${currentWeather.dateTime.day} ${daysList[currentWeather.dateTime.weekday]} ${currentWeather.dateTime.hour}:${currentWeather.dateTime.minute}',
-          style: Theme.of(context).textTheme.bodyLarge!,
+          'Updated ${currentWeather.dateTime.day} ${daysList[currentWeather.dateTime.weekday]} $formattedHour:$formattedMinute',
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ],
     );

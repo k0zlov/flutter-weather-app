@@ -5,6 +5,7 @@ import 'package:weather_app/domen/entities/location_entity.dart';
 import 'package:weather_app/domen/entities/weather_entity.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
+import 'package:weather_app/ui/widgets/mobile/mobile_dividers.dart';
 import 'package:weather_app/utils/temperature_converter.dart';
 
 class WeatherDashboardWidget extends StatelessWidget {
@@ -18,6 +19,8 @@ class WeatherDashboardWidget extends StatelessWidget {
         state.locations.singleWhere((location) => location.id == state.currentLocation);
 
     final List<WeatherHourEntity> hourlyForecastList = currentLocation.currentWeather.hourlyForecast;
+
+    final DateTime now = DateTime.now();
     return Column(
       children: [
         DefaultTextStyle(
@@ -29,12 +32,19 @@ class WeatherDashboardWidget extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             children: [
               ...hourlyForecastList.map(
-                (e) => HourStatisticsBox(
-                  temperature:
-                      state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.temperature) : e.temperature,
-                  time: '${e.dateTime.hour}:00',
-                  icon: Icons.cloud,
-                ),
+                (e) {
+                  return Row(
+                  children: [
+                    HourStatisticsBox(
+                      temperature:
+                          state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.temperature) : e.temperature,
+                      time: '${e.dateTime.hour}:00',
+                      icon: Icons.cloud,
+                    ),
+                    e.dateTime.day < now.day ? const MobileVerticalDivider() : const SizedBox(),
+                  ],
+                );
+                },
               ),
             ],
           ),
