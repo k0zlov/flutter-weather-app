@@ -18,4 +18,22 @@ class LocationEntity {
     required this.weatherForecastList,
     required this.geocoding,
   });
+
+  LocationEntity copyWith({
+    int? id,
+    WeatherEntity? currentWeather,
+    List<int>? pressureLastYear,
+    List<int>? humidityLastYear,
+    List<DayForecastEntity>? weatherForecastList,
+    GeocodingEntity? geocoding,
+  }) {
+    return LocationEntity(
+      id: id ?? this.id,
+      currentWeather: currentWeather ?? this.currentWeather,
+      pressureLastYear: pressureLastYear ?? this.pressureLastYear,
+      humidityLastYear: humidityLastYear ?? this.humidityLastYear,
+      weatherForecastList: weatherForecastList ?? this.weatherForecastList,
+      geocoding: geocoding ?? this.geocoding,
+    );
+  }
 }

@@ -7,7 +7,57 @@ import 'package:http/http.dart' as http;
 import '../models/weather_model.dart';
 
 class WeatherDataProvider {
+  Future<Map<String, dynamic>> getWeekStatistics({required double lat, required double lon, required int fromUnixDate}) async {
+    final uri = Uri.parse(
+        'https://history.openweathermap.org/data/2.5/history/city?lat=$lat&lon=$lon&type=hour&start=$fromUnixDate&appid=$apiKey&cnt=168');
+    final response = await http.get(uri);
+    final jsonBody = jsonDecode(response.body);
+    if (response.statusCode == 200 && jsonBody != null && jsonBody.isNotEmpty) {
+      final List<int> weekPressure = [];
+      final List<int> weekHumidity = [];
+      for(final hour in jsonBody['list']) {
+        weekPressure.add(hour['main']['pressure']);
+        weekHumidity.add(hour['main']['humidity']);
+      }
+      return {'pressure': weekPressure, 'humidity': weekHumidity};
+    } else {
+      return {'pressure': [], 'humidity': []};
+    }
+  }
 
+  /// DEPRECATED
+  Future<List<int>> getWeekPressureFromDate({required double lat, required double lon, required int fromUnixDate}) async {
+    final uri = Uri.parse(
+        'https://history.openweathermap.org/data/2.5/history/city?lat=$lat&lon=$lon&type=hour&start=$fromUnixDate&appid=$apiKey&cnt=168');
+    final response = await http.get(uri);
+    final jsonBody = jsonDecode(response.body);
+    if (response.statusCode == 200 && jsonBody != null && jsonBody.isNotEmpty) {
+      final List<int> weekPressure = [];
+      for(final hour in jsonBody['list']) {
+        weekPressure.add(hour['main']['pressure']);
+      }
+      return weekPressure;
+    } else {
+      return [];
+    }
+  }
+
+  /// DEPRECATED
+  Future<List<int>> getWeekHumidityFromDate({required double lat, required double lon, required int fromUnixDate}) async {
+    final uri = Uri.parse(
+        'https://history.openweathermap.org/data/2.5/history/city?lat=$lat&lon=$lon&type=hour&start=$fromUnixDate&appid=$apiKey&cnt=168');
+    final response = await http.get(uri);
+    final jsonBody = jsonDecode(response.body);
+    if (response.statusCode == 200 && jsonBody != null && jsonBody.isNotEmpty) {
+      final List<int> weekHumidity = [];
+      for(final hour in jsonBody['list']) {
+        weekHumidity.add(hour['main']['humidity']);
+      }
+      return weekHumidity;
+    } else {
+      return [];
+    }
+  }
 
   Future<List<HourForecastModel>?> getHourlyForecast(
       {required double lat, required double lon, required amount}) async {

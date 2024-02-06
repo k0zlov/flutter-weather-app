@@ -22,7 +22,7 @@ class MobileOtherStatistics extends StatelessWidget {
       children: [
         Expanded(
           flex: 1,
-          child: MobileCustomContainer(title: 'Wind speed', value: '${currentWeather.windSpeed} km/h', iconData: Icons.wind_power),
+          child: MobileCustomContainer(title: 'Wind speed', value: '${currentWeather.windSpeed} m/s', iconData: Icons.wind_power),
         ),
         const SizedBox(width: 15),
         Expanded(

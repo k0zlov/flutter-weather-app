@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:weather_app/domen/entities/day_forecast_entity.dart';
 import 'package:weather_app/domen/entities/geocoding_entity.dart';
@@ -37,14 +35,13 @@ class HomeViewModel extends ChangeNotifier {
     final List<GeocodingEntity> savedGeocodingList = [GeocodingEntity.defaultData];
 
     for (GeocodingEntity geocoding in savedGeocodingList) {
-      final WeatherEntity weather = await _weatherRepository.getCurrentWeather(lat: geocoding.lat, lon: geocoding.lon);
-
+      final WeatherEntity weather = await _weatherRepository.getCurrentWeather(geocoding: geocoding);
       newLocations.add(
         LocationEntity(
           id: UniqueKey().hashCode,
           currentWeather: weather,
-          pressureLastYear: List.generate(24 * 30 ~/ 7, (index) => Random().nextInt(101)),
-          humidityLastYear: List.generate(24 * 30 ~/ 7, (index) => Random().nextInt(101)),
+          pressureLastYear: [],
+          humidityLastYear: [],
           weatherForecastList: List.generate(
             10,
             (index) => DayForecastEntity(
@@ -60,9 +57,34 @@ class HomeViewModel extends ChangeNotifier {
     }
     _state = _state.copyWith(locations: [..._state.locations, ...newLocations], currentLocation: newLocations[0].id);
     notifyListeners();
+    await _loadAllLocationsChartStatistics();
   }
 
-  Future<void> setLocation() async {}
+  Future<void> _loadAllLocationsChartStatistics() async {
+    for (LocationEntity location in state.locations) {
+      await loadChartStatistics(id: location.id);
+    }
+  }
+
+  Future<void> loadChartStatistics({required int id}) async {
+    final List<LocationEntity> newLocations = [];
+    for (LocationEntity location in state.locations) {
+      if (location.id == id) {
+        final Map<String, dynamic> lastYearStatistics =
+            await _weatherRepository.getLastYearStatistics(geocoding: location.geocoding);
+
+        final changedLocation = location.copyWith(
+          humidityLastYear: lastYearStatistics['humidity'],
+          pressureLastYear: lastYearStatistics['pressure'],
+        );
+        newLocations.add(changedLocation);
+      } else {
+        newLocations.add(location);
+      }
+    }
+    _state = _state.copyWith(locations: newLocations);
+    notifyListeners();
+  }
 
   /// Chart data
   void switchChartData() {
@@ -75,9 +97,6 @@ class HomeViewModel extends ChangeNotifier {
     await _unitsRepository.setFahrenheitBool(isFahrenheit: !_state.isFahrenheit);
     _state = _state.copyWith(isFahrenheit: !_state.isFahrenheit);
     notifyListeners();
-    final geocoding = await _geocodingRepository.getEntityByCity(city: 'Kyiv');
-    final currentWeather = await _weatherRepository.getCurrentWeather(lat: geocoding.lat, lon: geocoding.lon);
-    print(currentWeather);
   }
 
   Future<void> _setSavedUnits() async {

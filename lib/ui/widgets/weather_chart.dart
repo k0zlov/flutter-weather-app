@@ -1,4 +1,3 @@
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -170,15 +169,22 @@ class Chart extends StatelessWidget {
     final LocationEntity currentLocation =
         state.locations.singleWhere((location) => location.id == state.currentLocation);
 
-    final List<FlSpot> items = List.generate(
-      30 * 12 ~/ 7,
-      (index) => FlSpot(
-        index.toDouble(),
-        state.isPressure
-            ? currentLocation.pressureLastYear[index].toDouble()
-            : currentLocation.humidityLastYear[index].toDouble(),
-      ),
-    );
+    final bool viewCondition =
+        state.isPressure ? currentLocation.pressureLastYear.isEmpty : currentLocation.humidityLastYear.isEmpty;
+
+    List<FlSpot> items = [];
+
+    if (!viewCondition) {
+      items = List.generate(
+        state.isPressure ? currentLocation.pressureLastYear.length : currentLocation.humidityLastYear.length,
+        (index) => FlSpot(
+          index.toDouble(),
+          state.isPressure
+              ? currentLocation.pressureLastYear[index].toDouble()
+              : currentLocation.humidityLastYear[index].toDouble(),
+        ),
+      );
+    }
 
     /// Months logic
     final int currentMonth = DateTime.now().month;
@@ -198,92 +204,108 @@ class Chart extends StatelessWidget {
       return MediaQuery.of(context).size.width < 915;
     }
 
-    return LineChart(LineChartData(
-      lineBarsData: [
-        LineChartBarData(
-          curveSmoothness: 0.2,
-          shadow: const BoxShadow(offset: Offset(1, 1), color: Colors.grey, blurRadius: 6),
-          spots: items,
-          isCurved: true,
-          color: Theme.of(context).colorScheme.primary,
-          barWidth: 4,
-          isStrokeCapRound: true,
-          gradient: LinearGradient(colors: [
-            Theme.of(context).colorScheme.primary.withOpacity(0.2),
-            Theme.of(context).colorScheme.primary.withOpacity(0.4),
-            Theme.of(context).colorScheme.primary.withOpacity(0.6),
-            Theme.of(context).colorScheme.primary,
-          ]),
-          belowBarData: BarAreaData(show: false),
-        ),
-      ],
-      lineTouchData: LineTouchData(
-        touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: Theme.of(context).colorScheme.secondary,
-          fitInsideHorizontally: true,
-          fitInsideVertically: true,
-          showOnTopOfTheChartBoxArea: isMobileVersion(),
-          getTooltipItems: (value) {
-            return value
-                .map((e) => LineTooltipItem(
-                    '${(e.x.toInt() - 52) * -1} weeks ago\nAverage: ${e.y}$units',
-                    Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Theme.of(context).colorScheme.onSecondary,
-                        )))
-                .toList();
-          },
-        ),
-      ),
-      gridData: const FlGridData(
-        show: true,
-        drawVerticalLine: false,
-        drawHorizontalLine: true,
-      ),
-      titlesData: FlTitlesData(
-        leftTitles: AxisTitles(
-          drawBelowEverything: false,
-          sideTitles: SideTitles(
-            getTitlesWidget: (title, _) => Text(
-              title < 0 || title > 100 ? '' : '$title $units',
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: isMobileVersion() ? 12 : 16),
-            ),
-            interval: isMobileVersion() ? 20 : 10,
-            reservedSize: state.isPressure ? 65 : 45,
-            showTitles: true,
-          ),
-        ),
-        bottomTitles: AxisTitles(
-          drawBelowEverything: false,
-          sideTitles: SideTitles(
-            getTitlesWidget: (title, _) {
-              final intValue = title.toInt();
-              if (intValue % 4 == 0 && intValue ~/ 4 < currentMonthsList.length) {
-                return Container(
-                  margin: const EdgeInsets.only(left: 80),
-                  child: Text(
-                    currentMonthsList[title.toInt() ~/ 4],
-                    style: Theme.of(context).textTheme.bodyLarge,
+    return viewCondition
+        ? const Center(child: CircularProgressIndicator())
+        : LineChart(
+            LineChartData(
+              lineBarsData: [
+                LineChartBarData(
+                  curveSmoothness: 0.2,
+                  shadow: const BoxShadow(offset: Offset(1, 1), color: Colors.grey, blurRadius: 6),
+                  spots: items,
+                  isCurved: true,
+                  color: Theme.of(context).colorScheme.primary,
+                  barWidth: 4,
+                  isStrokeCapRound: true,
+                  gradient: LinearGradient(colors: [
+                    Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                    Theme.of(context).colorScheme.primary.withOpacity(0.4),
+                    Theme.of(context).colorScheme.primary.withOpacity(0.6),
+                    Theme.of(context).colorScheme.primary,
+                  ]),
+                  belowBarData: BarAreaData(show: false),
+                ),
+              ],
+              lineTouchData: LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  tooltipBgColor: Theme.of(context).colorScheme.secondary,
+                  fitInsideHorizontally: true,
+                  fitInsideVertically: true,
+                  showOnTopOfTheChartBoxArea: isMobileVersion(),
+                  getTooltipItems: (value) {
+                    return value
+                        .map((e) => LineTooltipItem(
+                            '${(e.x.toInt() - 52) * -1} weeks ago\nAverage: ${e.y}$units',
+                            Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  color: Theme.of(context).colorScheme.onSecondary,
+                                )))
+                        .toList();
+                  },
+                ),
+              ),
+              gridData: const FlGridData(
+                show: true,
+                drawVerticalLine: false,
+                drawHorizontalLine: true,
+              ),
+              titlesData: FlTitlesData(
+                leftTitles: AxisTitles(
+                  drawBelowEverything: false,
+                  sideTitles: SideTitles(
+                    getTitlesWidget: (title, _) => Text(
+                      state.isPressure
+                          ? title > 1080 || title < 960
+                              ? ''
+                              : '$title'
+                          : title < 0 || title > 100
+                              ? ''
+                              : '$title%',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: isMobileVersion() ? 12 : 16),
+                    ),
+                    interval: state.isPressure
+                        ? isMobileVersion()
+                            ? 18
+                            : 15
+                        : isMobileVersion()
+                            ? 20
+                            : 10,
+                    reservedSize: state.isPressure ? 55 : 45,
+                    showTitles: true,
                   ),
-                );
-              } else {
-                return const SizedBox();
-              }
-            },
-            interval: isMobileVersion() ? 8 : 4,
-            showTitles: true,
-            reservedSize: 30,
-          ),
-        ),
-        topTitles: const AxisTitles(drawBelowEverything: false, sideTitles: SideTitles(showTitles: false)),
-        rightTitles: const AxisTitles(drawBelowEverything: false, sideTitles: SideTitles(showTitles: false)),
-      ),
-      borderData: FlBorderData(
-        show: false,
-      ),
-      minX: -1,
-      maxX: 12 * 30 / 7,
-      minY: -10,
-      maxY: 110,
-    ));
+                ),
+                bottomTitles: AxisTitles(
+                  drawBelowEverything: false,
+                  sideTitles: SideTitles(
+                    getTitlesWidget: (title, _) {
+                      final intValue = title.toInt();
+                      if (intValue % 4 == 0 && intValue ~/ 4 < currentMonthsList.length) {
+                        return Container(
+                          margin: const EdgeInsets.only(left: 80),
+                          child: Text(
+                            currentMonthsList[title.toInt() ~/ 4],
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
+                    interval: isMobileVersion() ? 8 : 4,
+                    showTitles: true,
+                    reservedSize: 30,
+                  ),
+                ),
+                topTitles: const AxisTitles(drawBelowEverything: false, sideTitles: SideTitles(showTitles: false)),
+                rightTitles: const AxisTitles(drawBelowEverything: false, sideTitles: SideTitles(showTitles: false)),
+              ),
+              borderData: FlBorderData(
+                show: false,
+              ),
+              minX: -1,
+              maxX: 12 * 30 / 7,
+              minY: state.isPressure ? 950 : -10,
+              maxY: state.isPressure ? 1100 : 110,
+            ),
+          );
   }
 }

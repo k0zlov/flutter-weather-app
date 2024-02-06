@@ -144,7 +144,7 @@ class DayStatistics extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(currentWeather.windSpeed.toString()),
-                Text('km/h', style: Theme.of(context).textTheme.labelLarge)
+                Text('m/s', style: Theme.of(context).textTheme.labelLarge)
               ],
             ),
             Text('Wind speed', style: Theme.of(context).textTheme.labelLarge)
