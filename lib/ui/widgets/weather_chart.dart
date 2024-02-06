@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/constants/constants.dart';
 import 'package:weather_app/domen/entities/location_entity.dart';
-import 'package:weather_app/domen/entities/weather_entity.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
 
@@ -171,15 +170,13 @@ class Chart extends StatelessWidget {
     final LocationEntity currentLocation =
         state.locations.singleWhere((location) => location.id == state.currentLocation);
 
-    final WeatherEntity currentWeather = currentLocation.currentWeather;
-
     final List<FlSpot> items = List.generate(
       30 * 12 ~/ 7,
       (index) => FlSpot(
         index.toDouble(),
         state.isPressure
-            ? currentWeather.pressureLastYear[index].toDouble()
-            : currentWeather.humidityLastYear[index].toDouble(),
+            ? currentLocation.pressureLastYear[index].toDouble()
+            : currentLocation.humidityLastYear[index].toDouble(),
       ),
     );
 

@@ -16,7 +16,7 @@ class GeocodingModel {
 
   factory GeocodingModel.fromJson(Map<String, dynamic> json) {
     return GeocodingModel(
-      city: json['city'] as String,
+      city: json['name'] as String,
       country: json['country'] as String,
       lat: json['lat'] as double,
       lon: json['lon'] as double,

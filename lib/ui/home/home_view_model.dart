@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:weather_app/domen/entities/day_forecast_entity.dart';
 import 'package:weather_app/domen/entities/geocoding_entity.dart';
 import 'package:weather_app/domen/entities/location_entity.dart';
 import 'package:weather_app/domen/entities/weather_entity.dart';
+import 'package:weather_app/domen/repositories/geocoding_repository.dart';
 import 'package:weather_app/domen/repositories/units_repository.dart';
+import 'package:weather_app/domen/repositories/weather_repository.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 
 class HomeViewModel extends ChangeNotifier {
@@ -12,6 +16,8 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   final UnitsRepository _unitsRepository = UnitsRepository();
+  final WeatherRepository _weatherRepository = WeatherRepository();
+  final GeocodingRepository _geocodingRepository = GeocodingRepository();
   final TextEditingController _searchController = TextEditingController();
 
   TextEditingController get searchController => _searchController;
@@ -25,23 +31,20 @@ class HomeViewModel extends ChangeNotifier {
     _setSavedLocations();
   }
 
-  // WeatherEntity.defaultData.copyWith(
-  // dateTime: WeatherEntity.defaultData.dateTime.copyWith(
-  // day: WeatherEntity.defaultData.dateTime.day + index + 1,
-  // ),
-  // maxTemperature: index + 3,
-  // minTemperature: index - 3,
-  // )
-
   /// Locations
   Future<void> _setSavedLocations() async {
     final List<LocationEntity> newLocations = [];
     final List<GeocodingEntity> savedGeocodingList = [GeocodingEntity.defaultData];
+
     for (GeocodingEntity geocoding in savedGeocodingList) {
+      final WeatherEntity weather = await _weatherRepository.getCurrentWeather(lat: geocoding.lat, lon: geocoding.lon);
+
       newLocations.add(
         LocationEntity(
           id: UniqueKey().hashCode,
-          currentWeather: WeatherEntity.defaultData,
+          currentWeather: weather,
+          pressureLastYear: List.generate(24 * 30 ~/ 7, (index) => Random().nextInt(101)),
+          humidityLastYear: List.generate(24 * 30 ~/ 7, (index) => Random().nextInt(101)),
           weatherForecastList: List.generate(
             10,
             (index) => DayForecastEntity(
@@ -72,6 +75,9 @@ class HomeViewModel extends ChangeNotifier {
     await _unitsRepository.setFahrenheitBool(isFahrenheit: !_state.isFahrenheit);
     _state = _state.copyWith(isFahrenheit: !_state.isFahrenheit);
     notifyListeners();
+    final geocoding = await _geocodingRepository.getEntityByCity(city: 'Kyiv');
+    final currentWeather = await _weatherRepository.getCurrentWeather(lat: geocoding.lat, lon: geocoding.lon);
+    print(currentWeather);
   }
 
   Future<void> _setSavedUnits() async {

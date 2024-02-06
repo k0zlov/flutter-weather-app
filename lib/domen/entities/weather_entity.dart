@@ -1,18 +1,47 @@
 import 'package:weather_app/domen/entities/hour_forecast_entity.dart';
 
+import '../../data/models/weather_model.dart';
+
 class WeatherEntity {
   final int temperature;
   final DateTime dateTime;
   final int maxTemperature;
   final int minTemperature;
-  final int humidity;
-  final int windSpeed;
+  final String humidity;
+  final String windSpeed;
   final List<HourForecastEntity> hourlyForecast;
-  final List<int> humidityLastYear;
-  final List<int> pressureLastYear;
   final String icon;
   final String description;
+
+  @override
+  String toString() {
+    return 'WeatherEntity{temperature: $temperature, dateTime: $dateTime, maxTemperature: $maxTemperature, minTemperature: $minTemperature, humidity: $humidity, windSpeed: $windSpeed, hourlyForecast: $hourlyForecast, icon: $icon, description: $description, map: $map}';
+  }
+
   final String map;
+
+  factory WeatherEntity.fromModel(WeatherModel model) {
+    return WeatherEntity(
+      temperature: model.temperature?.toInt() ?? 0,
+      dateTime: model.timestamp != null ? DateTime.fromMillisecondsSinceEpoch(model.timestamp! * 1000) : DateTime.now(),
+      maxTemperature: model.maxTemperature?.toInt() ?? 0,
+      minTemperature: model.minTemperature?.toInt() ?? 0,
+      humidity: model.humidity?.toString() ?? 'No data',
+      windSpeed: model.windSpeed?.toString() ?? 'No data',
+      hourlyForecast: model.hourlyForecast?.map((hourModel) => HourForecastEntity.fromModel(hourModel)).toList() ??
+          List.generate(
+            24,
+            (index) => HourForecastEntity(
+              dateTime: DateTime.now(),
+              temperature: index,
+              icon: '03n',
+            ),
+          ),
+      icon: model.icon ?? '03n',
+      description: model.description ?? 'No data',
+      map: model.map ?? 'No data',
+    );
+  }
 
   const WeatherEntity({
     required this.temperature,
@@ -22,30 +51,10 @@ class WeatherEntity {
     required this.humidity,
     required this.windSpeed,
     required this.hourlyForecast,
-    required this.humidityLastYear,
-    required this.pressureLastYear,
     required this.icon,
     required this.description,
     required this.map,
   });
-
-  static final defaultData = WeatherEntity(
-    temperature: 4,
-    dateTime: DateTime.now(),
-    maxTemperature: 6,
-    minTemperature: -13,
-    humidity: 60,
-    windSpeed: 13,
-    hourlyForecast: List.generate(
-      24,
-      (index) => HourForecastEntity(dateTime: DateTime(2024, 2, index + 1, index), temperature: index, icon: '03n'),
-    ),
-    humidityLastYear: List.generate(12 * 30 ~/ 7, (index) => index % 4 == 0 ? index - 5 : index + 6),
-    pressureLastYear: List.generate(12 * 30 ~/ 7, (index) => index % 4 == 0 ? index - 1 : index + 2),
-    icon: '03n',
-    description: 'Cloudy',
-    map: 'map',
-  );
 
   @override
   bool operator ==(Object other) =>
@@ -59,8 +68,6 @@ class WeatherEntity {
           humidity == other.humidity &&
           windSpeed == other.windSpeed &&
           hourlyForecast == other.hourlyForecast &&
-          humidityLastYear == other.humidityLastYear &&
-          pressureLastYear == other.pressureLastYear &&
           icon == other.icon &&
           description == other.description &&
           map == other.map;
@@ -74,39 +81,7 @@ class WeatherEntity {
       humidity.hashCode ^
       windSpeed.hashCode ^
       hourlyForecast.hashCode ^
-      humidityLastYear.hashCode ^
-      pressureLastYear.hashCode ^
       icon.hashCode ^
       description.hashCode ^
       map.hashCode;
-
-  WeatherEntity copyWith({
-    int? temperature,
-    DateTime? dateTime,
-    int? maxTemperature,
-    int? minTemperature,
-    int? humidity,
-    int? windSpeed,
-    List<HourForecastEntity>? hourlyForecast,
-    List<int>? humidityLastYear,
-    List<int>? pressureLastYear,
-    String? icon,
-    String? description,
-    String? map,
-  }) {
-    return WeatherEntity(
-      temperature: temperature ?? this.temperature,
-      dateTime: dateTime ?? this.dateTime,
-      maxTemperature: maxTemperature ?? this.maxTemperature,
-      minTemperature: minTemperature ?? this.minTemperature,
-      humidity: humidity ?? this.humidity,
-      windSpeed: windSpeed ?? this.windSpeed,
-      hourlyForecast: hourlyForecast ?? this.hourlyForecast,
-      humidityLastYear: humidityLastYear ?? this.humidityLastYear,
-      pressureLastYear: pressureLastYear ?? this.pressureLastYear,
-      icon: icon ?? this.icon,
-      description: description ?? this.description,
-      map: map ?? this.map,
-    );
-  }
 }
