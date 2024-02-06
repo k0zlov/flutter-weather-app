@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:weather_app/domen/entities/day_forecast_entity.dart';
 import 'package:weather_app/domen/entities/geocoding_entity.dart';
 import 'package:weather_app/domen/entities/location_entity.dart';
 import 'package:weather_app/domen/entities/weather_entity.dart';
@@ -24,6 +25,14 @@ class HomeViewModel extends ChangeNotifier {
     _setSavedLocations();
   }
 
+  // WeatherEntity.defaultData.copyWith(
+  // dateTime: WeatherEntity.defaultData.dateTime.copyWith(
+  // day: WeatherEntity.defaultData.dateTime.day + index + 1,
+  // ),
+  // maxTemperature: index + 3,
+  // minTemperature: index - 3,
+  // )
+
   /// Locations
   Future<void> _setSavedLocations() async {
     final List<LocationEntity> newLocations = [];
@@ -35,12 +44,11 @@ class HomeViewModel extends ChangeNotifier {
           currentWeather: WeatherEntity.defaultData,
           weatherForecastList: List.generate(
             10,
-            (index) => WeatherEntity.defaultData.copyWith(
-              dateTime: WeatherEntity.defaultData.dateTime.copyWith(
-                day: WeatherEntity.defaultData.dateTime.day + index + 1,
-              ),
+            (index) => DayForecastEntity(
               maxTemperature: index + 3,
               minTemperature: index - 3,
+              dateTime: DateTime.now().copyWith(day: DateTime.now().day + index + 1),
+              icon: '03n',
             ),
           ),
           geocoding: geocoding,
@@ -51,9 +59,7 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setLocation() async {
-
-  }
+  Future<void> setLocation() async {}
 
   /// Chart data
   void switchChartData() {
