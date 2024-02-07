@@ -7,6 +7,7 @@ import 'package:weather_app/ui/home/home_state.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
 import 'package:weather_app/ui/widgets/mobile/mobile_dividers.dart';
 import 'package:weather_app/utils/temperature_converter.dart';
+import 'package:weather_icons/weather_icons.dart';
 
 class WideAppBar extends StatelessWidget {
   const WideAppBar({super.key});
@@ -50,11 +51,11 @@ class WideAppBar extends StatelessWidget {
         ),
         const SizedBox(height: 2.0),
         // Icon logic
-        const Icon(
-          Icons.cloud,
-          size: 130.0,
+        BoxedIcon(
+          currentWeather.icon,
+          size: 100.0,
         ),
-        const SizedBox(width: 2.0),
+        const SizedBox(width: 10.0),
         Text(
           currentWeather.description,
           style: Theme.of(context).textTheme.titleLarge,
@@ -103,12 +104,12 @@ class CollapsedAppBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const Column(
+        Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.cloud,
-              size: 130.0,
+            BoxedIcon(
+              currentWeather.icon,
+              size: 90.0,
             ),
           ],
         ),

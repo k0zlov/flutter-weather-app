@@ -53,7 +53,8 @@ class MobileWeatherForecastWidget extends StatelessWidget {
           ),
           const MobileHorizontalDivider(),
           ...weatherForecastList.map(
-            (e) => DayForecastWidget(
+            (e) => MobileForecastDayWidget(
+              icon: e.icon,
               minTemp:
                   state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.minTemperature) : e.minTemperature,
               maxTemp:
@@ -68,14 +69,21 @@ class MobileWeatherForecastWidget extends StatelessWidget {
   }
 }
 
-class DayForecastWidget extends StatelessWidget {
-  const DayForecastWidget(
-      {super.key, required this.maxTemp, required this.minTemp, required this.day, required this.hasDivider});
+class MobileForecastDayWidget extends StatelessWidget {
+  const MobileForecastDayWidget({
+    super.key,
+    required this.maxTemp,
+    required this.minTemp,
+    required this.day,
+    required this.hasDivider,
+    required this.icon,
+  });
 
   final int maxTemp;
   final int minTemp;
   final String day;
   final bool hasDivider;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +99,7 @@ class DayForecastWidget extends StatelessWidget {
                 children: [
                   Text(day, style: Theme.of(context).textTheme.headlineSmall),
                   const SizedBox(width: 5),
-                  const BoxedIcon(WeatherIcons.cloud),
+                  BoxedIcon(icon),
                 ],
               ),
               Row(

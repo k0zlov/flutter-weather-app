@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:weather_app/data/models/weather_hour_model.dart';
+import 'package:weather_app/utils/icon_converter.dart';
 
 class WeatherHourEntity {
   final DateTime dateTime;
   final int temperature;
-  final String icon;
+  final IconData icon;
 
   const WeatherHourEntity({
     required this.dateTime,
@@ -20,14 +22,14 @@ class WeatherHourEntity {
     return WeatherHourEntity(
       dateTime: model.timestamp != null ? DateTime.fromMillisecondsSinceEpoch(model.timestamp! * 1000) : DateTime.now(),
       temperature: model.temperature?.toInt() ?? 0,
-      icon: model.icon ?? '03n',
+      icon: IconConverter.getIconDataFromIconId(id: model.icon ?? 'xxx'),
     );
   }
 
   WeatherHourEntity copyWith({
     DateTime? dateTime,
     int? temperature,
-    String? icon,
+    IconData? icon,
   }) {
     return WeatherHourEntity(
       dateTime: dateTime ?? this.dateTime,

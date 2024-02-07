@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:weather_app/domen/entities/weather_hour_entity.dart';
+import 'package:weather_app/utils/icon_converter.dart';
+import 'package:weather_icons/weather_icons.dart';
 
 import '../../data/models/weather_model.dart';
 
@@ -10,7 +13,7 @@ class WeatherEntity {
   final String humidity;
   final String windSpeed;
   final List<WeatherHourEntity> hourlyForecast;
-  final String icon;
+  final IconData icon;
   final String description;
 
   @override
@@ -32,10 +35,10 @@ class WeatherEntity {
             (index) => WeatherHourEntity(
               dateTime: DateTime.now(),
               temperature: index,
-              icon: '03n',
+              icon: WeatherIcons.na,
             ),
           ),
-      icon: model.icon ?? '03n',
+      icon: IconConverter.getIconDataFromIconId(id: model.icon ?? 'xxx'), //  model.weatherId,
       description: model.description ?? 'No data',
     );
   }

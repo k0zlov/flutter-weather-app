@@ -61,7 +61,7 @@ class MobileHourlyStatistics extends StatelessWidget {
                       temperature:
                           state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.temperature) : e.temperature,
                       time: '${e.dateTime.hour}:00',
-                      icon: Icons.cloud,
+                      icon: e.icon,
                     ),
                   ),
                 ],

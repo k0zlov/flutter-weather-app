@@ -46,7 +46,7 @@ class MobileScreenVersion extends StatelessWidget {
                 MobileWeatherChart(),
                 SizedBox(height: 25),
                 MobileWeatherMap(),
-                SizedBox(height: 25),
+                SizedBox(height: 100),
               ],
             ),
           ),

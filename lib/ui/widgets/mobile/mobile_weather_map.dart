@@ -36,7 +36,10 @@ class MobileWeatherMap extends StatelessWidget {
             ),
           ),
           const MobileHorizontalDivider(),
-          const Expanded(child: WeatherMapWidget()),
+          const Expanded(child: Padding(
+            padding: EdgeInsets.all(14.0),
+            child: WeatherMapWidget(),
+          )),
         ],
       ),
     );

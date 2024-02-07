@@ -29,7 +29,7 @@ class WeatherForecastWidget extends StatelessWidget {
             children: [
               ...weatherForecastList.map(
                 (e) => ForecastDayWidget(
-                  icon: Icons.cloud,
+                  icon: e.icon,
                   minTemp: state.isFahrenheit
                       ? TemperatureConverter.celsiusToFahrenheit(e.minTemperature)
                       : e.minTemperature,
