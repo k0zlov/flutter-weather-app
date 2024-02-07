@@ -31,6 +31,6 @@ class GeocodingEntity {
   }
 
   factory GeocodingEntity.fromModel(GeocodingModel model) {
-    return GeocodingEntity(city: model.city, country: model.city, lat: model.lat, lon: model.lon);
+    return GeocodingEntity(city: model.city, country: model.country, lat: model.lat, lon: model.lon);
   }
 }

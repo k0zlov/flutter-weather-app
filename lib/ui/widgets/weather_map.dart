@@ -12,23 +12,26 @@ class WeatherMapWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeViewModel viewModel = context.read<HomeViewModel>();
     final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
     final LocationEntity currentLocation =
         state.locations.singleWhere((location) => location.id == state.currentLocation);
 
     final lat = currentLocation.geocoding.lat;
     final lon = currentLocation.geocoding.lon;
-
+    
     return ClipRRect(
       borderRadius: BorderRadius.circular(30),
       child: FlutterMap(
+        mapController: viewModel.mapController,
         options: MapOptions(initialCenter: LatLng(lat, lon), initialZoom: 6),
         children: [
           TileLayer(
             urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
           ),
           TileLayer(
-            urlTemplate: 'http://maps.openweathermap.org/maps/2.0/weather/PA0/{z}/{x}/{y}?date=1552861800&appid=$apiKey',
+            urlTemplate:
+                'http://maps.openweathermap.org/maps/2.0/weather/PA0/{z}/{x}/{y}&appid=$apiKey',
           )
         ],
       ),

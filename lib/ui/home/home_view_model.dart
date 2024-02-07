@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:weather_app/domen/entities/day_forecast_entity.dart';
 import 'package:weather_app/domen/entities/geocoding_entity.dart';
 import 'package:weather_app/domen/entities/location_entity.dart';
@@ -17,6 +19,9 @@ class HomeViewModel extends ChangeNotifier {
   final WeatherRepository _weatherRepository = WeatherRepository();
   final GeocodingRepository _geocodingRepository = GeocodingRepository();
   final TextEditingController _searchController = TextEditingController();
+  final MapController _mapController = MapController();
+
+  MapController get mapController => _mapController;
 
   TextEditingController get searchController => _searchController;
 
@@ -35,7 +40,7 @@ class HomeViewModel extends ChangeNotifier {
     final testData = await _geocodingRepository.getEntityByCity(city: 'Paris');
     final List<GeocodingEntity> savedGeocodingList = [GeocodingEntity.defaultData, testData];
 
-    for(int i = 0; i < savedGeocodingList.length; i++) {
+    for (int i = 0; i < savedGeocodingList.length; i++) {
       final GeocodingEntity geocoding = savedGeocodingList[i];
       final WeatherEntity weather = await _weatherRepository.getCurrentWeather(geocoding: geocoding);
       final List<DayForecastEntity> dailyForecast = await _weatherRepository.getDailyForecast(geocoding: geocoding);
@@ -81,6 +86,15 @@ class HomeViewModel extends ChangeNotifier {
       }
     }
     _state = _state.copyWith(locations: newLocations);
+    notifyListeners();
+  }
+
+  void changeCurrentLocation({required int id}) {
+    _state = _state.copyWith(currentLocation: id);
+    final LocationEntity currentLocation =
+        _state.locations.singleWhere((location) => location.id == _state.currentLocation);
+
+    _mapController.move(LatLng(currentLocation.geocoding.lat, currentLocation.geocoding.lon), 6);
     notifyListeners();
   }
 
