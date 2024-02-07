@@ -151,16 +151,35 @@ class AddLocationWidget extends StatefulWidget {
   State<AddLocationWidget> createState() => _AddLocationWidgetState();
 }
 
-class _AddLocationWidgetState extends State<AddLocationWidget> {
+class _AddLocationWidgetState extends State<AddLocationWidget> with SingleTickerProviderStateMixin {
   bool isHovered = false;
+  late AnimationController _iconController;
+
+  @override
+  void initState() {
+    super.initState();
+    _iconController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _iconController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
       onEnter: (_) => setState(() {
+        _iconController.repeat();
         isHovered = true;
       }),
       onExit: (_) => setState(() {
+        _iconController.stop();
+        _iconController.reset();
         isHovered = false;
       }),
       child: GestureDetector(
@@ -178,11 +197,11 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
                   return Path()
                     ..moveTo(20, 0)
                     ..lineTo(size.width - 20, 0)
-                    ..arcToPoint(Offset(size.width, 20), radius: Radius.circular(20))
+                    ..arcToPoint(Offset(size.width, 20), radius: const Radius.circular(20))
                     ..lineTo(size.width, size.height - 20)
-                    ..arcToPoint(Offset(size.width - 20, size.height), radius: Radius.circular(20))
+                    ..arcToPoint(Offset(size.width - 20, size.height), radius: const Radius.circular(20))
                     ..lineTo(20, size.height)
-                    ..arcToPoint(Offset(0, size.height - 20), radius: Radius.circular(20))
+                    ..arcToPoint(Offset(0, size.height - 20), radius: const Radius.circular(20))
                     ..lineTo(0, 20)
                     ..arcToPoint(const Offset(20, 0), radius: const Radius.circular(20));
                 },
@@ -227,9 +246,13 @@ class _AddLocationWidgetState extends State<AddLocationWidget> {
               ),
               height: isHovered ? 65 : 60,
               width: isHovered ? 65 : 60,
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).colorScheme.onPrimary,
+              child: Center(
+                child: AnimatedIcon(
+                  icon: AnimatedIcons.add_event,
+                  size: isHovered ? 40 : 30,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  progress: _iconController,
+                ),
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/ui/home/versions/wide_screen.dart';
 import 'package:weather_app/ui/widgets/content_container.dart';
+import 'package:weather_app/ui/widgets/locations_widget.dart';
 import 'package:weather_app/ui/widgets/weather_chart.dart';
 import 'package:weather_app/ui/widgets/weather_dashboard.dart';
 import 'package:weather_app/ui/widgets/weather_forecast.dart';
@@ -37,6 +38,8 @@ class RestrictedScreenVersion extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 50),
+              LocationsListWidget(),
               SizedBox(height: 50),
             ],
           ),
