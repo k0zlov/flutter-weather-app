@@ -32,15 +32,17 @@ class HomeViewModel extends ChangeNotifier {
   /// Locations
   Future<void> _setSavedLocations() async {
     final List<LocationEntity> newLocations = [];
-    final List<GeocodingEntity> savedGeocodingList = [GeocodingEntity.defaultData];
+    final testData = await _geocodingRepository.getEntityByCity(city: 'Paris');
+    final List<GeocodingEntity> savedGeocodingList = [GeocodingEntity.defaultData, testData];
 
-    for (GeocodingEntity geocoding in savedGeocodingList) {
+    for(int i = 0; i < savedGeocodingList.length; i++) {
+      final GeocodingEntity geocoding = savedGeocodingList[i];
       final WeatherEntity weather = await _weatherRepository.getCurrentWeather(geocoding: geocoding);
       final List<DayForecastEntity> dailyForecast = await _weatherRepository.getDailyForecast(geocoding: geocoding);
 
       newLocations.add(
         LocationEntity(
-          id: UniqueKey().hashCode,
+          id: i + 1,
           currentWeather: weather,
           pressureLastYear: [],
           humidityLastYear: [],
@@ -49,7 +51,12 @@ class HomeViewModel extends ChangeNotifier {
         ),
       );
     }
-    _state = _state.copyWith(locations: [..._state.locations, ...newLocations], currentLocation: newLocations[0].id);
+
+    _state = _state.copyWith(
+      locations: [..._state.locations, ...newLocations],
+      currentLocation: newLocations[0].id,
+      isLoading: false,
+    );
     notifyListeners();
 
     for (LocationEntity location in state.locations) {

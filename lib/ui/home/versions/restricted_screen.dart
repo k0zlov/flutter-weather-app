@@ -19,7 +19,7 @@ class RestrictedScreenVersion extends StatelessWidget {
             children: [
               AppBarWidget(),
               SizedBox(height: 35),
-              ContentContainer(height: 300, width: double.infinity, child: WeatherDashboardWidget()),
+              ContentContainer(height: 325, width: double.infinity, child: WeatherDashboardWidget()),
               SizedBox(height: 35),
               ContentContainer(height: 380, width: double.infinity, child: WeatherChartWidget()),
               SizedBox(height: 35),
@@ -33,7 +33,7 @@ class RestrictedScreenVersion extends StatelessWidget {
                   SizedBox(width: 35),
                   Expanded(
                     flex: 1,
-                    child: ContentContainer(height: 300, width: 200, child: WeatherMapWidget()),
+                    child: ContentContainer(height: 325, width: 200, child: WeatherMapWidget()),
                   ),
                 ],
               ),

@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
 
-    return state.locations.isEmpty
+    return state.isLoading
         ? const Center(child: CircularProgressIndicator())
         : LayoutBuilder(
             builder: (context, constraints) {

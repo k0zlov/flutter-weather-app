@@ -8,6 +8,8 @@ import 'package:weather_app/ui/home/home_view_model.dart';
 import 'package:weather_app/utils/temperature_converter.dart';
 import 'package:weather_icons/weather_icons.dart';
 
+import '../../constants/constants.dart';
+
 class WeatherDashboardWidget extends StatelessWidget {
   const WeatherDashboardWidget({super.key});
 
@@ -20,6 +22,11 @@ class WeatherDashboardWidget extends StatelessWidget {
 
     final List<WeatherHourEntity> hourlyForecastList = currentLocation.currentWeather.hourlyForecast;
 
+    final WeatherEntity currentWeather = currentLocation.currentWeather;
+
+    final String formattedHour = currentWeather.dateTime.hour.toString().padLeft(2, '0');
+    final String formattedMinute = currentWeather.dateTime.minute.toString().padLeft(2, '0');
+
     return Column(
       children: [
         DefaultTextStyle(
@@ -28,7 +35,7 @@ class WeatherDashboardWidget extends StatelessWidget {
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(6.0),
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
@@ -44,6 +51,15 @@ class WeatherDashboardWidget extends StatelessWidget {
                   },
                 ),
               ],
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            'Updated ${currentWeather.dateTime.day} ${daysList[currentWeather.dateTime.weekday]} $formattedHour:$formattedMinute',
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
             ),
           ),
         ),
@@ -95,9 +111,9 @@ class _HourStatisticsBoxState extends State<HourStatisticsBox> {
           child: Column(
             children: [
               Text(widget.time),
-              const SizedBox(height: 5),
-              Icon(widget.icon, color: Theme.of(context).colorScheme.secondary),
-              const SizedBox(height: 5),
+              const SizedBox(height: 2),
+              BoxedIcon(widget.icon, color: Theme.of(context).colorScheme.secondary),
+              const SizedBox(height: 2),
               Text('${widget.temperature}°'),
             ],
           ),

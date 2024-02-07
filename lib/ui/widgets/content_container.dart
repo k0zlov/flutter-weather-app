@@ -3,20 +3,28 @@ import 'package:flutter/material.dart';
 import 'dividers.dart';
 
 class ContentContainer extends StatelessWidget {
-  const ContentContainer({super.key, required this.width, required this.height, required this.child});
+  const ContentContainer({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.child,
+    this.backgroundColor,
+  });
 
   final double width;
   final double height;
   final Widget child;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
       height: height,
       width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Theme.of(context).colorScheme.onBackground,
+        color: backgroundColor ?? Theme.of(context).colorScheme.onBackground,
       ),
       padding: const EdgeInsets.all(14),
       child: child,

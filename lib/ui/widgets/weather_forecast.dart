@@ -6,6 +6,7 @@ import 'package:weather_app/domen/entities/location_entity.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
 import 'package:weather_app/utils/temperature_converter.dart';
+import 'package:weather_icons/weather_icons.dart';
 
 class WeatherForecastWidget extends StatelessWidget {
   const WeatherForecastWidget({super.key});
@@ -101,7 +102,7 @@ class _ForecastDayWidgetState extends State<ForecastDayWidget> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Icon(widget.icon, size: 40),
+                    BoxedIcon(widget.icon, size: 40),
                     const SizedBox(width: 12),
                     Text('${widget.maxTemp}°'),
                     const SizedBox(width: 2),
