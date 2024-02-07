@@ -112,7 +112,7 @@ class _HourStatisticsBoxState extends State<HourStatisticsBox> {
             children: [
               Text(widget.time),
               const SizedBox(height: 2),
-              BoxedIcon(widget.icon, color: Theme.of(context).colorScheme.onSurface),
+              BoxedIcon(widget.icon, color: Theme.of(context).colorScheme.onPrimary),
               const SizedBox(height: 2),
               Text('${widget.temperature}°'),
             ],
