@@ -106,7 +106,7 @@ class _ChartDataPickerState extends State<ChartDataPicker> {
           child: Stack(
             children: [
               AnimatedAlign(
-                duration: const Duration(milliseconds: 100),
+                duration: const Duration(milliseconds: 300),
                 alignment: state.isPressure ? Alignment.centerRight : Alignment.centerLeft,
                 child: Container(
                   decoration: BoxDecoration(

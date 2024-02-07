@@ -211,7 +211,9 @@ class _AddLocationWidgetState extends State<AddLocationWidget> with SingleTicker
                   height: 220,
                   width: 200,
                   decoration: BoxDecoration(
-                    color: isHovered ? Theme.of(context).colorScheme.onSurface.withOpacity(0.2) : Colors.transparent,
+                    color: isHovered
+                        ? Theme.of(context).colorScheme.onSurface.withOpacity(0.4)
+                        : Theme.of(context).colorScheme.onSurface.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Padding(
@@ -227,7 +229,8 @@ class _AddLocationWidgetState extends State<AddLocationWidget> with SingleTicker
                           child: Text(
                             'Add new cities you are interested in',
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                  fontSize: 16,
                                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                                 ),
                           ),

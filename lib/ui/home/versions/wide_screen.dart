@@ -29,12 +29,18 @@ class WideScreenVersion extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: ContentContainer(height: 325, width: 200, child: WeatherDashboardWidget()),
+                    child: Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: ContentContainer(height: 325, width: 200, child: WeatherDashboardWidget()),
+                    ),
                   ),
                   SizedBox(width: 30),
                   Expanded(
                     flex: 1,
-                    child: ContentContainer(height: 325, width: 200, child: WeatherMapWidget()),
+                    child: Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: ContentContainer(height: 325, width: 200, child: WeatherMapWidget()),
+                    ),
                   ),
                 ],
               ),
@@ -43,12 +49,18 @@ class WideScreenVersion extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: ContentContainer(height: 380, width: 200, child: WeatherChartWidget()),
+                    child: Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: ContentContainer(height: 380, width: 200, child: WeatherChartWidget()),
+                    ),
                   ),
                   SizedBox(width: 30),
                   Expanded(
                     flex: 1,
-                    child: ContentContainer(height: 380, width: 200, child: WeatherForecastWidget()),
+                    child: Padding(
+                      padding: EdgeInsets.all(4.0),
+                      child: ContentContainer(height: 380, width: 200, child: WeatherForecastWidget()),
+                    ),
                   ),
                 ],
               ),

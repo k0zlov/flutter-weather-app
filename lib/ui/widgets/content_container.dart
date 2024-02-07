@@ -23,9 +23,11 @@ class ContentContainer extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: backgroundColor ?? Theme.of(context).colorScheme.onBackground,
-      ),
+          borderRadius: BorderRadius.circular(20),
+          color: backgroundColor ?? Theme.of(context).colorScheme.onBackground,
+          boxShadow: [
+            BoxShadow(offset: const Offset(-4, 2), blurRadius: 2, color: Colors.black.withOpacity(0.3)),
+          ]),
       padding: const EdgeInsets.all(14),
       child: child,
     );
