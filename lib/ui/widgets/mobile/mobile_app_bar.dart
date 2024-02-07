@@ -5,7 +5,7 @@ import 'package:weather_app/domen/entities/location_entity.dart';
 import 'package:weather_app/domen/entities/weather_entity.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
-import 'package:weather_app/ui/widgets/mobile/mobile_dividers.dart';
+import 'package:weather_app/ui/widgets/dividers.dart';
 import 'package:weather_app/utils/temperature_converter.dart';
 import 'package:weather_icons/weather_icons.dart';
 
@@ -70,7 +70,7 @@ class WideAppBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('H:$maxTemperature°'),
-              const MobileVerticalDivider(),
+              const CustomVerticalDivider(),
               Text('L:$minTemperature°'),
             ],
           ),
@@ -131,7 +131,7 @@ class CollapsedAppBar extends StatelessWidget {
               child: Row(
                 children: [
                   Text('$temperature°'),
-                  const MobileVerticalDivider(),
+                  const CustomVerticalDivider(),
                   Text(currentWeather.description),
                 ],
               ),

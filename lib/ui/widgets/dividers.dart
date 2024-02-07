@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MobileHorizontalDivider extends StatelessWidget {
-  const MobileHorizontalDivider({super.key});
+class CustomHorizontalDivider extends StatelessWidget {
+  const CustomHorizontalDivider({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,8 +12,8 @@ class MobileHorizontalDivider extends StatelessWidget {
   }
 }
 
-class MobileVerticalDivider extends StatelessWidget {
-  const MobileVerticalDivider({super.key});
+class CustomVerticalDivider extends StatelessWidget {
+  const CustomVerticalDivider({super.key});
 
   @override
   Widget build(BuildContext context) {

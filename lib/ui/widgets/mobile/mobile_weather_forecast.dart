@@ -8,7 +8,7 @@ import 'package:weather_app/ui/home/home_view_model.dart';
 import 'package:weather_app/utils/temperature_converter.dart';
 import 'package:weather_icons/weather_icons.dart';
 
-import 'mobile_dividers.dart';
+import '../dividers.dart';
 
 class MobileWeatherForecastWidget extends StatelessWidget {
   const MobileWeatherForecastWidget({super.key});
@@ -22,49 +22,21 @@ class MobileWeatherForecastWidget extends StatelessWidget {
 
     final List<DayForecastEntity> weatherForecastList = currentLocation.weatherForecastList;
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Theme.of(context).colorScheme.onBackground,
-      ),
-      padding: const EdgeInsets.all(4),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 18),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.calendar_month_sharp,
-                  size: 18,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
-                ),
-                const MobileVerticalDivider(),
-                Text(
-                  '10-days forecast',
-                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
-                      ),
-                ),
-                const MobileHorizontalDivider(),
-              ],
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ...weatherForecastList.map(
+          (e) => MobileForecastDayWidget(
+            icon: e.icon,
+            minTemp:
+                state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.minTemperature) : e.minTemperature,
+            maxTemp:
+                state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.maxTemperature) : e.maxTemperature,
+            day: '${e.dateTime.day} ${daysList[e.dateTime.weekday - 1]}',
+            hasDivider: weatherForecastList[9] != e,
           ),
-          const MobileHorizontalDivider(),
-          ...weatherForecastList.map(
-            (e) => MobileForecastDayWidget(
-              icon: e.icon,
-              minTemp:
-                  state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.minTemperature) : e.minTemperature,
-              maxTemp:
-                  state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.maxTemperature) : e.maxTemperature,
-              day: '${e.dateTime.day} ${daysList[e.dateTime.weekday - 1]}',
-              hasDivider: weatherForecastList[9] != e,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -120,7 +92,7 @@ class MobileForecastDayWidget extends StatelessWidget {
             ],
           ),
         ),
-        hasDivider ? const MobileHorizontalDivider() : const SizedBox(height: 10),
+        hasDivider ? const CustomHorizontalDivider() : const SizedBox(height: 10),
       ],
     );
   }

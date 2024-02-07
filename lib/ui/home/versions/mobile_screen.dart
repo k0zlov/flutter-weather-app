@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/ui/widgets/content_container.dart';
+import 'package:weather_app/ui/widgets/dividers.dart';
 import 'package:weather_app/ui/widgets/mobile/mobile_hourly_statistics.dart';
 import 'package:weather_app/ui/widgets/mobile/mobile_nav_bar.dart';
 import 'package:weather_app/ui/widgets/mobile/mobile_other_statistics.dart';
-import 'package:weather_app/ui/widgets/mobile/mobile_weather_chart.dart';
 import 'package:weather_app/ui/widgets/mobile/mobile_weather_forecast.dart';
-import 'package:weather_app/ui/widgets/mobile/mobile_weather_map.dart';
+import 'package:weather_app/ui/widgets/weather_chart.dart';
+import 'package:weather_app/ui/widgets/weather_map.dart';
 
 import '../../widgets/mobile/mobile_app_bar.dart';
 
@@ -37,16 +39,59 @@ class MobileScreenVersion extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 4, horizontal: 14),
             child: Column(
               children: [
-                MobileHourlyStatistics(),
+                NamedContentContainer(
+                  width: double.infinity,
+                  height: 210,
+                  name: 'Hourly forecast',
+                  icon: Icons.access_time,
+                  child: MobileHourlyStatistics(),
+                ),
                 SizedBox(height: 25),
-                MobileWeatherForecastWidget(),
+                NamedContentContainer(
+                  width: double.infinity,
+                  height: 620,
+                  name: '10-days forecast',
+                  icon: Icons.calendar_month_sharp,
+                  child: MobileWeatherForecastWidget(),
+                ),
                 SizedBox(height: 25),
                 MobileOtherStatistics(),
                 SizedBox(height: 25),
-                MobileWeatherChart(),
+                NamedContentContainer(
+                  width: double.infinity,
+                  height: 370,
+                  name: 'Statistics chart',
+                  icon: Icons.area_chart,
+                  child: Expanded(
+                    child: Column(
+                      children: [
+                        ChartDataPicker(),
+                        CustomHorizontalDivider(),
+                        SizedBox(
+                            height: 235,
+                            width: double.infinity,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Chart(),
+                            )),
+                      ],
+                    ),
+                  ),
+                ),
                 SizedBox(height: 25),
-                MobileWeatherMap(),
-                SizedBox(height: 100),
+                NamedContentContainer(
+                  width: double.infinity,
+                  height: 470,
+                  name: 'Weather map',
+                  icon: Icons.map,
+                  child: Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(6.0),
+                      child: WeatherMapWidget(),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 70),
               ],
             ),
           ),

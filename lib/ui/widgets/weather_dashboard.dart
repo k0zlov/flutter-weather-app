@@ -5,7 +5,6 @@ import 'package:weather_app/domen/entities/location_entity.dart';
 import 'package:weather_app/domen/entities/weather_entity.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
-import 'package:weather_app/ui/widgets/mobile/mobile_dividers.dart';
 import 'package:weather_app/utils/temperature_converter.dart';
 import 'package:weather_icons/weather_icons.dart';
 
@@ -21,7 +20,6 @@ class WeatherDashboardWidget extends StatelessWidget {
 
     final List<WeatherHourEntity> hourlyForecastList = currentLocation.currentWeather.hourlyForecast;
 
-    final DateTime now = DateTime.now();
     return Column(
       children: [
         DefaultTextStyle(
@@ -29,26 +27,24 @@ class WeatherDashboardWidget extends StatelessWidget {
           child: const DayStatistics(),
         ),
         Expanded(
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              ...hourlyForecastList.map(
-                (e) {
-                  return Row(
-                    children: [
-                      HourStatisticsBox(
-                        temperature: state.isFahrenheit
-                            ? TemperatureConverter.celsiusToFahrenheit(e.temperature)
-                            : e.temperature,
-                        time: '${e.dateTime.hour}:00',
-                        icon: e.icon,
-                      ),
-                      e.dateTime.day < now.day ? const MobileVerticalDivider() : const SizedBox(),
-                    ],
-                  );
-                },
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                ...hourlyForecastList.map(
+                  (e) {
+                    return HourStatisticsBox(
+                      temperature: state.isFahrenheit
+                          ? TemperatureConverter.celsiusToFahrenheit(e.temperature)
+                          : e.temperature,
+                      time: '${e.dateTime.hour}:00',
+                      icon: e.icon,
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],

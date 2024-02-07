@@ -78,6 +78,7 @@ class _LanguageSelectorState extends State<LanguageSelector> {
       });
     }
 
+
     return MouseRegion(
       onEnter: (_) => setState(() {
         isHovered = true;

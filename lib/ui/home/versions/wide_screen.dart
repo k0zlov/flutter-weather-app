@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/constants/constants.dart';
 import 'package:weather_app/ui/home/home_state.dart';
+import 'package:weather_app/ui/widgets/content_container.dart';
 import 'package:weather_app/ui/widgets/language_selector.dart';
-import 'package:weather_app/ui/widgets/mobile/mobile_dividers.dart';
 import 'package:weather_app/ui/widgets/search_field.dart';
 import 'package:weather_app/ui/widgets/theme_switch.dart';
 import 'package:weather_app/ui/widgets/units_switch.dart';
@@ -33,12 +33,12 @@ class WideScreenVersion extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: CustomContainer(height: 300, width: 200, child: WeatherDashboardWidget()),
+                    child: ContentContainer(height: 300, width: 200, child: WeatherDashboardWidget()),
                   ),
                   SizedBox(width: 30),
                   Expanded(
                     flex: 1,
-                    child: CustomContainer(height: 300, width: 200, child: WeatherMapWidget()),
+                    child: ContentContainer(height: 300, width: 200, child: WeatherMapWidget()),
                   ),
                 ],
               ),
@@ -47,12 +47,12 @@ class WideScreenVersion extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: CustomContainer(height: 380, width: 200, child: WeatherChartWidget()),
+                    child: ContentContainer(height: 380, width: 200, child: WeatherChartWidget()),
                   ),
                   SizedBox(width: 30),
                   Expanded(
                     flex: 1,
-                    child: CustomContainer(height: 380, width: 200, child: WeatherForecastWidget()),
+                    child: ContentContainer(height: 380, width: 200, child: WeatherForecastWidget()),
                   ),
                 ],
               )
@@ -60,28 +60,6 @@ class WideScreenVersion extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class CustomContainer extends StatelessWidget {
-  const CustomContainer({super.key, required this.height, required this.width, required this.child});
-
-  final double height;
-  final double width;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Theme.of(context).colorScheme.onBackground,
-      ),
-      padding: const EdgeInsets.all(20),
-      child: child,
     );
   }
 }
