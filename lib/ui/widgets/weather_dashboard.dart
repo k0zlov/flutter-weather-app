@@ -94,7 +94,7 @@ class _HourStatisticsBoxState extends State<HourStatisticsBox> {
       child: Container(
         decoration: BoxDecoration(
             color: isHovered
-                ? Theme.of(context).colorScheme.primary.withOpacity(0.9)
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.8)
                 : Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(25),
             boxShadow: [
@@ -112,7 +112,7 @@ class _HourStatisticsBoxState extends State<HourStatisticsBox> {
             children: [
               Text(widget.time),
               const SizedBox(height: 2),
-              BoxedIcon(widget.icon, color: Theme.of(context).colorScheme.secondary),
+              BoxedIcon(widget.icon, color: Theme.of(context).colorScheme.onSurface),
               const SizedBox(height: 2),
               Text('${widget.temperature}°'),
             ],

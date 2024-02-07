@@ -27,6 +27,7 @@ class LocationsListWidget extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: LocationWidget(
+                onDelete: () => viewModel.deleteLocation(id: location.id),
                 onTap: () => viewModel.changeCurrentLocation(id: location.id),
                 isSelected: location.id == state.currentLocation,
                 icon: location.currentWeather.icon,
@@ -53,6 +54,7 @@ class LocationWidget extends StatefulWidget {
     required this.countryName,
     required this.isSelected,
     required this.onTap,
+    required this.onDelete,
   });
 
   final bool isSelected;
@@ -61,6 +63,7 @@ class LocationWidget extends StatefulWidget {
   final IconData icon;
   final int maxTemp;
   final int minTemp;
+  final void Function() onDelete;
   final void Function() onTap;
 
   @override
@@ -121,7 +124,7 @@ class _LocationWidgetState extends State<LocationWidget> {
                   )),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: widget.onDelete,
               child: Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
@@ -130,7 +133,7 @@ class _LocationWidgetState extends State<LocationWidget> {
                 height: 60,
                 width: 60,
                 child: isHovered
-                    ? Icon(Icons.cancel, size: 50, color: Theme.of(context).colorScheme.onPrimary)
+                    ? const Icon(Icons.cancel, size: 50, color: Colors.redAccent)
                     : BoxedIcon(
                         widget.icon,
                         color: Theme.of(context).colorScheme.onPrimary,

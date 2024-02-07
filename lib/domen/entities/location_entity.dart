@@ -19,6 +19,27 @@ class LocationEntity {
     required this.geocoding,
   });
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LocationEntity &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          currentWeather == other.currentWeather &&
+          pressureLastYear == other.pressureLastYear &&
+          humidityLastYear == other.humidityLastYear &&
+          weatherForecastList == other.weatherForecastList &&
+          geocoding == other.geocoding;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      currentWeather.hashCode ^
+      pressureLastYear.hashCode ^
+      humidityLastYear.hashCode ^
+      weatherForecastList.hashCode ^
+      geocoding.hashCode;
+
   LocationEntity copyWith({
     int? id,
     WeatherEntity? currentWeather,

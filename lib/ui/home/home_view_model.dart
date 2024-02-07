@@ -89,6 +89,15 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteLocation({required int id}) {
+    final List<LocationEntity> newLocations = _state.locations.where((location) => location.id != id).toList();
+    if(id == _state.currentLocation) {
+      changeCurrentLocation(id: newLocations[0].id);
+    }
+    _state = _state.copyWith(locations: newLocations);
+    notifyListeners();
+  }
+
   void changeCurrentLocation({required int id}) {
     _state = _state.copyWith(currentLocation: id);
     final LocationEntity currentLocation =

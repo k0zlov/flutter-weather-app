@@ -31,7 +31,7 @@ class WeatherMapWidget extends StatelessWidget {
           ),
           TileLayer(
             urlTemplate:
-                'http://maps.openweathermap.org/maps/2.0/weather/PA0/{z}/{x}/{y}&appid=$apiKey',
+                'http://maps.openweathermap.org/maps/2.0/weather/PA0/{z}/{x}/{y}?appid=$apiKey',
           )
         ],
       ),
