@@ -105,6 +105,10 @@ class HomeViewModel extends ChangeNotifier {
         geocoding: _state.locations.singleWhere((location) => location.id == id).geocoding);
 
     /// Deleting location from UI
+    if (id == _state.currentLocation && newLocations.isNotEmpty) {
+      changeCurrentLocation(id: newLocations[0].id);
+    }
+
     _state =
         _state.copyWith(locations: newLocations, currentLocation: newLocations.isEmpty ? 1 : newLocations[0].id);
     notifyListeners();
