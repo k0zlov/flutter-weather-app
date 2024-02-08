@@ -12,7 +12,7 @@ class WeatherHourModel {
   factory WeatherHourModel.fromJson(Map<String, dynamic> json) {
     return WeatherHourModel(
       timestamp: json["dt"],
-      temperature: json["main"]["temp"],
+      temperature: json["main"]["temp"]?.toDouble(),
       icon: json["weather"][0]["icon"],
     );
   }

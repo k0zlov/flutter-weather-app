@@ -13,8 +13,8 @@ class DayForecastModel {
 
   factory DayForecastModel.fromJson(Map<String, dynamic> json) {
     return DayForecastModel(
-      maxTemperature: json['temp']['max'] as double,
-      minTemperature: json['temp']['min'] as double,
+      maxTemperature: json['temp']['max']?.toDouble(),
+      minTemperature: json['temp']['min']?.toDouble(),
       timestamp: json['dt'],
       icon: json['weather'][0]['icon'],
     );

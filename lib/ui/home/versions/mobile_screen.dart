@@ -29,9 +29,9 @@ class MobileScreenVersion extends StatelessWidget {
               scrolledUnderElevation: 0,
               pinned: true,
               collapsedHeight: 150,
-              expandedHeight: 400,
+              expandedHeight: 450,
               flexibleSpace: LayoutBuilder(builder: (context, constraints) {
-                if (constraints.maxHeight < 350) {
+                if (constraints.maxHeight < 420) {
                   return const CollapsedAppBar();
                 } else {
                   return const WideAppBar();

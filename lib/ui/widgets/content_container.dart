@@ -58,7 +58,7 @@ class NamedContentContainer extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 18),
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
             child: Row(
               children: [
                 Icon(

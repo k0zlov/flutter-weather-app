@@ -66,7 +66,9 @@ class MobileDashboardPage extends StatelessWidget {
                         minTemp: state.isFahrenheit
                             ? TemperatureConverter.celsiusToFahrenheit(weather.minTemperature)
                             : weather.minTemperature,
-                        cityName: location.geocoding.city,
+                        cityName: location.geocoding.city.length > 9
+                            ? '${location.geocoding.city.substring(0, 6)}...'
+                            : location.geocoding.city,
                         temp: state.isFahrenheit
                             ? TemperatureConverter.celsiusToFahrenheit(weather.temperature)
                             : weather.temperature,

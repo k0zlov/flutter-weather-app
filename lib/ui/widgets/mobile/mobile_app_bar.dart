@@ -46,7 +46,9 @@ class WideAppBar extends StatelessWidget {
         ),
         const SizedBox(height: 4.0),
         Text(
-          currentLocation.geocoding.city,
+          currentLocation.geocoding.city.length > 13
+              ? '${currentLocation.geocoding.city.substring(0, 10)}...'
+              : currentLocation.geocoding.city,
           style: Theme.of(context).textTheme.headlineLarge,
         ),
         const SizedBox(height: 2.0),
@@ -123,7 +125,9 @@ class CollapsedAppBar extends StatelessWidget {
             ),
             const SizedBox(height: 4.0),
             Text(
-              currentLocation.geocoding.city,
+              currentLocation.geocoding.city.length > 10
+                  ? '${currentLocation.geocoding.city.substring(0, 7)}...'
+                  : currentLocation.geocoding.city, //currentLocation.geocoding.city,
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             DefaultTextStyle(
