@@ -38,24 +38,41 @@ class MobileDashboardPage extends StatelessWidget {
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                    child: MobileLocationWidget(
-                      id: location.id,
-                      maxTemp: state.isFahrenheit
-                          ? TemperatureConverter.celsiusToFahrenheit(weather.maxTemperature)
-                          : weather.maxTemperature,
-                      minTemp: state.isFahrenheit
-                          ? TemperatureConverter.celsiusToFahrenheit(weather.minTemperature)
-                          : weather.minTemperature,
-                      cityName: location.geocoding.city,
-                      temp: state.isFahrenheit
-                          ? TemperatureConverter.celsiusToFahrenheit(weather.temperature)
-                          : weather.temperature,
-                      description: weather.description,
-                      icon: weather.icon,
-                      onTap: () {
-                        viewModel.onMenuClicked();
-                        viewModel.changeCurrentLocation(id: location.id);
+                    child: Dismissible(
+                      key: Key(location.id.toString()),
+                      direction: DismissDirection.horizontal,
+                      background: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(Icons.delete, size: 50, color: Colors.redAccent),
+                            Icon(Icons.delete, size: 50, color: Colors.redAccent),
+                          ],
+                        ),
+                      ),
+                      onDismissed: (direction) {
+                        viewModel.deleteLocation(id: location.id);
                       },
+                      child: MobileLocationWidget(
+                        maxTemp: state.isFahrenheit
+                            ? TemperatureConverter.celsiusToFahrenheit(weather.maxTemperature)
+                            : weather.maxTemperature,
+                        minTemp: state.isFahrenheit
+                            ? TemperatureConverter.celsiusToFahrenheit(weather.minTemperature)
+                            : weather.minTemperature,
+                        cityName: location.geocoding.city,
+                        temp: state.isFahrenheit
+                            ? TemperatureConverter.celsiusToFahrenheit(weather.temperature)
+                            : weather.temperature,
+                        description: weather.description,
+                        icon: weather.icon,
+                        onTap: () {
+                          viewModel.onMenuClicked();
+                          viewModel.changeCurrentLocation(id: location.id);
+                        },
+                      ),
                     ),
                   );
                 })
@@ -78,10 +95,8 @@ class MobileLocationWidget extends StatelessWidget {
     required this.description,
     required this.icon,
     required this.onTap,
-    required this.id,
   });
 
-  final int id;
   final int maxTemp;
   final int minTemp;
   final int temp;
@@ -92,68 +107,45 @@ class MobileLocationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomeViewModel viewModel = context.read<HomeViewModel>();
-
     return GestureDetector(
       onTap: onTap,
-      child: Dismissible(
-        key: Key(id.toString()),
-        direction: DismissDirection.horizontal,
-        background: Container(
-          decoration: BoxDecoration(
-            color: Colors.redAccent,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          padding: const EdgeInsets.all(8),
-          child: const Row(
+      child: ContentContainer(
+        width: double.infinity,
+        height: 150,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(Icons.delete, size: 50),
-              Icon(Icons.delete, size: 50),
-            ],
-          ),
-        ),
-        onDismissed: (direction) {
-          viewModel.deleteLocation(id: id);
-        },
-        child: ContentContainer(
-          width: double.infinity,
-          height: 150,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        BoxedIcon(icon, size: 50),
-                        Text(cityName, style: Theme.of(context).textTheme.headlineMedium),
-                      ],
-                    ),
-                    Text('$temp°', style: Theme.of(context).textTheme.headlineLarge),
-                  ],
-                ),
-                DefaultTextStyle(
-                  style: Theme.of(context).textTheme.headlineSmall!,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
                     children: [
-                      Text(description),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('H:$maxTemp°'),
-                          Text('L:$minTemp°'),
-                        ],
-                      )
+                      BoxedIcon(icon, size: 50),
+                      Text(cityName, style: Theme.of(context).textTheme.headlineMedium),
                     ],
                   ),
-                )
-              ],
-            ),
+                  Text('$temp°', style: Theme.of(context).textTheme.headlineLarge),
+                ],
+              ),
+              DefaultTextStyle(
+                style: Theme.of(context).textTheme.headlineSmall!,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(description),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('H:$maxTemp°'),
+                        Text('L:$minTemp°'),
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),
