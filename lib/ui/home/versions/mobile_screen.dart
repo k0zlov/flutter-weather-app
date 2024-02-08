@@ -22,7 +22,7 @@ class MobileScreenVersion extends StatelessWidget {
     final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
 
     return Scaffold(
-      body: !state.isMobileDashboard ? const MobileDashboardPage() : NestedScrollView(
+      body: state.isMobileDashboard ? const MobileDashboardPage() : NestedScrollView(
         headerSliverBuilder: (context, isScrolled) {
           return [
             SliverAppBar(

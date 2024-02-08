@@ -27,7 +27,7 @@ class MobileDashboardPage extends StatelessWidget {
               children: [
                 state.locations.isEmpty
                     ? Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                         child: Center(
                           child: Text('Add new location', style: Theme.of(context).textTheme.headlineMedium),
                         ),

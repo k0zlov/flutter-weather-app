@@ -86,16 +86,19 @@ class HomeViewModel extends ChangeNotifier {
         newLocations.add(location);
       }
     }
-    _state = _state.copyWith(locations: newLocations);
-    notifyListeners();
+    if(_state.locations.any((location) => location.id == id)) {
+      _state = _state.copyWith(locations: newLocations);
+      notifyListeners();
+    }
   }
 
   void deleteLocation({required int id}) {
     final List<LocationEntity> newLocations = _state.locations.where((location) => location.id != id).toList();
-    if (id == _state.currentLocation) {
+    if (id == _state.currentLocation && newLocations.isNotEmpty) {
       changeCurrentLocation(id: newLocations[0].id);
     }
-    _state = _state.copyWith(locations: newLocations);
+    _state =
+        _state.copyWith(locations: newLocations, currentLocation: newLocations.isEmpty ? 1 : _state.currentLocation);
     notifyListeners();
   }
 
