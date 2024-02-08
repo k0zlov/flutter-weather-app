@@ -145,7 +145,13 @@ class DayStatistics extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        BoxedIcon(currentWeather.icon, size: 100),
+        Column(
+          children: [
+            BoxedIcon(currentWeather.icon, size: 80),
+            const SizedBox(height: 2),
+            Text(currentWeather.description, style: Theme.of(context).textTheme.labelLarge),
+          ],
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
