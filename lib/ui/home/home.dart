@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
 
   static Widget render() {
     return ChangeNotifierProvider(
-      create: (context) => HomeViewModel(),
+      create: (context) => HomeViewModel(context),
       child: const SafeArea(child: HomePage()),
     );
   }

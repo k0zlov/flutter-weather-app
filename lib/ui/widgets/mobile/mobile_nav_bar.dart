@@ -37,14 +37,16 @@ class MobileBottomNavigationBar extends StatelessWidget {
                     builder: (context) {
                       return ChangeNotifierProvider.value(
                         value: viewModel,
-                        child: SettingsBottomSheet(),
+                        child: const SettingsBottomSheet(),
                       );
                     });
               },
             ),
             IconButton(
               icon: Icon(Icons.menu_rounded, size: 30, color: Theme.of(context).colorScheme.onSurface),
-              onPressed: () {},
+              onPressed: () {
+                viewModel.onMenuClicked();
+              },
             ),
           ],
         ),

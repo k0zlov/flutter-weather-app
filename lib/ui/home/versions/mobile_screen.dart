@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weather_app/ui/mobile_dashboard/mobile_dashboard.dart';
 import 'package:weather_app/ui/widgets/content_container.dart';
 import 'package:weather_app/ui/widgets/dividers.dart';
 import 'package:weather_app/ui/widgets/mobile/mobile_hourly_statistics.dart';
@@ -9,14 +11,18 @@ import 'package:weather_app/ui/widgets/weather_chart.dart';
 import 'package:weather_app/ui/widgets/weather_map.dart';
 
 import '../../widgets/mobile/mobile_app_bar.dart';
+import '../home_state.dart';
+import '../home_view_model.dart';
 
 class MobileScreenVersion extends StatelessWidget {
   const MobileScreenVersion({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
+
     return Scaffold(
-      body: NestedScrollView(
+      body: !state.isMobileDashboard ? const MobileDashboardPage() : NestedScrollView(
         headerSliverBuilder: (context, isScrolled) {
           return [
             SliverAppBar(

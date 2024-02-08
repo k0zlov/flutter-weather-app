@@ -6,8 +6,10 @@ class HomePageState {
   final int currentLocation;
   final bool isLoading;
   final List<LocationEntity> locations;
+  final bool isMobileDashboard;
 
   const HomePageState({
+    this.isMobileDashboard = false,
     this.isLoading = true,
     this.isPressure = false,
     this.currentLocation = 0,
@@ -21,6 +23,7 @@ class HomePageState {
     int? currentLocation,
     bool? isLoading,
     List<LocationEntity>? locations,
+    bool? isMobileDashboard,
   }) {
     return HomePageState(
       isFahrenheit: isFahrenheit ?? this.isFahrenheit,
@@ -28,6 +31,7 @@ class HomePageState {
       currentLocation: currentLocation ?? this.currentLocation,
       isLoading: isLoading ?? this.isLoading,
       locations: locations ?? this.locations,
+      isMobileDashboard: isMobileDashboard ?? this.isMobileDashboard,
     );
   }
 }

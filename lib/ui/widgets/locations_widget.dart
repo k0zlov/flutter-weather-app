@@ -33,8 +33,8 @@ class LocationsListWidget extends StatelessWidget {
                 icon: location.currentWeather.icon,
                 cityName: location.geocoding.city,
                 countryName: location.geocoding.country,
-                minTemp: location.weatherForecastList[0].minTemperature,
-                maxTemp: location.weatherForecastList[0].maxTemperature,
+                minTemp: location.currentWeather.minTemperature,
+                maxTemp: location.currentWeather.maxTemperature,
               ),
             );
           }),

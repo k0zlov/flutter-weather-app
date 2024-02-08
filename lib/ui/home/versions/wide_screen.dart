@@ -97,7 +97,7 @@ class AppBarWidget extends StatelessWidget {
         const SizedBox(
           child: Row(
             children: [
-              SearchField(),
+              SearchField(width: 200, height: 45),
               SizedBox(width: 20),
               LanguageSelector(),
               SizedBox(width: 20),

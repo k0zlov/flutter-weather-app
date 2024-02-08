@@ -11,10 +11,11 @@ import 'package:weather_app/domen/repositories/weather_repository.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  HomeViewModel() {
+  HomeViewModel(this.context) {
     init();
   }
 
+  final BuildContext context;
   final UnitsRepository _unitsRepository = UnitsRepository();
   final WeatherRepository _weatherRepository = WeatherRepository();
   final GeocodingRepository _geocodingRepository = GeocodingRepository();
@@ -91,7 +92,7 @@ class HomeViewModel extends ChangeNotifier {
 
   void deleteLocation({required int id}) {
     final List<LocationEntity> newLocations = _state.locations.where((location) => location.id != id).toList();
-    if(id == _state.currentLocation) {
+    if (id == _state.currentLocation) {
       changeCurrentLocation(id: newLocations[0].id);
     }
     _state = _state.copyWith(locations: newLocations);
@@ -102,8 +103,17 @@ class HomeViewModel extends ChangeNotifier {
     _state = _state.copyWith(currentLocation: id);
     final LocationEntity currentLocation =
         _state.locations.singleWhere((location) => location.id == _state.currentLocation);
+    if (MediaQuery.of(context).size.width > 915) {
+      _mapController.move(LatLng(currentLocation.geocoding.lat, currentLocation.geocoding.lon), 6);
+    }
+    notifyListeners();
+  }
 
-    _mapController.move(LatLng(currentLocation.geocoding.lat, currentLocation.geocoding.lon), 6);
+  /// Mobile Dashboard
+  void onMenuClicked() {
+    _state = _state.copyWith(
+      isMobileDashboard: _state.locations.isEmpty ? true : !_state.isMobileDashboard,
+    );
     notifyListeners();
   }
 
