@@ -32,7 +32,9 @@ class LocationsListWidget extends StatelessWidget {
                 onTap: () => viewModel.changeCurrentLocation(id: location.id),
                 isSelected: location.id == state.currentLocation,
                 icon: location.currentWeather.icon,
-                cityName: location.geocoding.city,
+                cityName: location.geocoding.city.length > 9
+                    ? "${location.geocoding.city.substring(0, 6)}..."
+                    : location.geocoding.city,
                 countryName: location.geocoding.country,
                 minTemp: location.currentWeather.minTemperature,
                 maxTemp: location.currentWeather.maxTemperature,

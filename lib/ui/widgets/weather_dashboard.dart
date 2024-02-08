@@ -42,9 +42,8 @@ class WeatherDashboardWidget extends StatelessWidget {
                 ...hourlyForecastList.map(
                   (e) {
                     return HourStatisticsBox(
-                      temperature: state.isFahrenheit
-                          ? TemperatureConverter.celsiusToFahrenheit(e.temperature)
-                          : e.temperature,
+                      temperature:
+                          state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.temperature) : e.temperature,
                       time: '${e.dateTime.hour}:00',
                       icon: e.icon,
                     );
@@ -59,8 +58,8 @@ class WeatherDashboardWidget extends StatelessWidget {
           child: Text(
             'Updated ${currentWeather.dateTime.day} ${daysList[currentWeather.dateTime.weekday]} $formattedHour:$formattedMinute',
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
-            ),
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                ),
           ),
         ),
       ],
@@ -139,6 +138,10 @@ class DayStatistics extends StatelessWidget {
         ? TemperatureConverter.celsiusToFahrenheit(currentWeather.temperature)
         : currentWeather.temperature;
 
+    bool isRestrictedScreen() {
+      return MediaQuery.of(context).size.width < 1150;
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -146,7 +149,9 @@ class DayStatistics extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(currentLocation.geocoding.city),
+            Text(currentLocation.geocoding.city.length > (isRestrictedScreen() ? 12 : 16)
+                ? '${currentLocation.geocoding.city.substring(0,isRestrictedScreen() ? 9 : 13)}...'
+                : currentLocation.geocoding.city),
             Text(currentLocation.geocoding.country, style: Theme.of(context).textTheme.labelLarge)
           ],
         ),
