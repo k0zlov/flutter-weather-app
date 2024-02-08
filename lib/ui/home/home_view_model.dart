@@ -49,7 +49,7 @@ class HomeViewModel extends ChangeNotifier {
 
       newLocations.add(
         LocationEntity(
-          id: i + 1,
+          id: UniqueKey().hashCode,
           currentWeather: weather,
           pressureLastYear: [],
           humidityLastYear: [],
@@ -151,7 +151,7 @@ class HomeViewModel extends ChangeNotifier {
     final List<DayForecastEntity> dailyForecast = await _weatherRepository.getDailyForecast(geocoding: geocoding);
 
     final LocationEntity newLocation = LocationEntity(
-      id: _state.locations.length + 1,
+      id: UniqueKey().hashCode,
       currentWeather: weather,
       pressureLastYear: [],
       humidityLastYear: [],
