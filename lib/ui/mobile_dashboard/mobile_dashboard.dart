@@ -20,7 +20,11 @@ class MobileDashboardPage extends StatelessWidget {
       padding: const EdgeInsets.all(20.0),
       child: Column(
         children: [
-          const SearchField(width: double.infinity, height: 50),
+          SearchField(
+            onSubmitted: () => viewModel.addLocation(cityName: viewModel.searchController.text),
+            width: double.infinity,
+            height: 50,
+          ),
           const SizedBox(height: 25),
           Expanded(
             child: ListView(
@@ -52,8 +56,8 @@ class MobileDashboardPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      onDismissed: (direction) {
-                        viewModel.deleteLocation(id: location.id);
+                      onDismissed: (direction) async {
+                        await viewModel.deleteLocation(id: location.id);
                       },
                       child: MobileLocationWidget(
                         maxTemp: state.isFahrenheit

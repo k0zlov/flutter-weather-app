@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/ui/widgets/search_field.dart';
 
 class FullScreenSearchInput extends StatelessWidget {
-  const FullScreenSearchInput({super.key});
+  const FullScreenSearchInput({super.key, this.onSubmitted});
+
+  final void Function()? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -12,10 +14,11 @@ class FullScreenSearchInput extends StatelessWidget {
         children: [
           Text('Add your new weather location', style: Theme.of(context).textTheme.headlineLarge),
           const SizedBox(height: 10),
-          const Material(
+          Material(
             elevation: 0,
             color: Colors.transparent,
             child: SearchField(
+              onSubmitted: onSubmitted,
               width: 500,
               height: 200,
             ),

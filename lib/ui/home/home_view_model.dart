@@ -6,6 +6,7 @@ import 'package:weather_app/domen/entities/geocoding_entity.dart';
 import 'package:weather_app/domen/entities/location_entity.dart';
 import 'package:weather_app/domen/entities/weather_entity.dart';
 import 'package:weather_app/domen/repositories/geocoding_repository.dart';
+import 'package:weather_app/domen/repositories/locations_repository.dart';
 import 'package:weather_app/domen/repositories/units_repository.dart';
 import 'package:weather_app/domen/repositories/weather_repository.dart';
 import 'package:weather_app/ui/home/home_state.dart';
@@ -19,6 +20,7 @@ class HomeViewModel extends ChangeNotifier {
   final UnitsRepository _unitsRepository = UnitsRepository();
   final WeatherRepository _weatherRepository = WeatherRepository();
   final GeocodingRepository _geocodingRepository = GeocodingRepository();
+  final LocationsRepository _locationsRepository = LocationsRepository();
   final TextEditingController _searchController = TextEditingController();
   final MapController _mapController = MapController();
 
@@ -38,8 +40,7 @@ class HomeViewModel extends ChangeNotifier {
   /// Locations
   Future<void> _setSavedLocations() async {
     final List<LocationEntity> newLocations = [];
-    final testData = await _geocodingRepository.getEntityByCity(city: 'Paris');
-    final List<GeocodingEntity> savedGeocodingList = [GeocodingEntity.defaultData, testData];
+    final List<GeocodingEntity> savedGeocodingList = await _locationsRepository.getSavedLocations();
 
     for (int i = 0; i < savedGeocodingList.length; i++) {
       final GeocodingEntity geocoding = savedGeocodingList[i];
@@ -65,6 +66,7 @@ class HomeViewModel extends ChangeNotifier {
     );
     notifyListeners();
 
+    /// Updating chart data after loading main information
     for (LocationEntity location in newLocations) {
       await loadLocationChartStatistics(id: location.id);
     }
@@ -77,13 +79,14 @@ class HomeViewModel extends ChangeNotifier {
       LocationEntity location = _state.locations[i];
       if (location.id == id) {
         final Map<String, dynamic> lastYearStatistics =
-        await _weatherRepository.getLastYearStatistics(geocoding: location.geocoding);
+            await _weatherRepository.getLastYearStatistics(geocoding: location.geocoding);
 
         changedLocation = location.copyWith(
           humidityLastYear: lastYearStatistics['humidity'],
           pressureLastYear: lastYearStatistics['pressure'],
         );
 
+        /// Updating UI only if such location still exists
         if (_state.locations.any((location) => location.id == id)) {
           _state.locations[i] = changedLocation;
           _state = _state.copyWith();
@@ -94,11 +97,17 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  void deleteLocation({required int id}) {
+  Future<void> deleteLocation({required int id}) async {
     final List<LocationEntity> newLocations = _state.locations.where((location) => location.id != id).toList();
     if (id == _state.currentLocation && newLocations.isNotEmpty) {
       changeCurrentLocation(id: newLocations[0].id);
     }
+
+    /// Deleting location from Database
+    await _locationsRepository.deleteLocation(
+        geocoding: _state.locations.singleWhere((location) => location.id == id).geocoding);
+
+    /// Deleting location from UI
     _state =
         _state.copyWith(locations: newLocations, currentLocation: newLocations.isEmpty ? 1 : _state.currentLocation);
     notifyListeners();
@@ -108,6 +117,8 @@ class HomeViewModel extends ChangeNotifier {
     _state = _state.copyWith(currentLocation: id);
     final LocationEntity currentLocation =
         _state.locations.singleWhere((location) => location.id == _state.currentLocation);
+
+    /// Handling map moving on mobile devices(Map is not being built when moving)
     if (MediaQuery.of(context).size.width > 915) {
       _mapController.move(LatLng(currentLocation.geocoding.lat, currentLocation.geocoding.lon), 6);
     }
@@ -118,8 +129,26 @@ class HomeViewModel extends ChangeNotifier {
     if (cityName == '') return;
 
     final GeocodingEntity geocoding = await _geocodingRepository.getEntityByCity(city: cityName);
+
+    /// Checking if such location already exists
+    if (_state.locations
+        .any((location) => location.geocoding.lat == geocoding.lat && location.geocoding.lon == geocoding.lon)) {
+
+      /// Updating current location id to existing location
+      _state = _state.copyWith(
+          currentLocation: state.locations
+              .singleWhere(
+                  (location) => location.geocoding.lat == geocoding.lat && location.geocoding.lon == geocoding.lon)
+              .id);
+      _searchController.text = '';
+      notifyListeners();
+      return;
+    }
+
     final WeatherEntity weather = await _weatherRepository.getCurrentWeather(geocoding: geocoding);
+
     final List<DayForecastEntity> dailyForecast = await _weatherRepository.getDailyForecast(geocoding: geocoding);
+
     final LocationEntity newLocation = LocationEntity(
       id: _state.locations.length + 1,
       currentWeather: weather,
@@ -128,7 +157,12 @@ class HomeViewModel extends ChangeNotifier {
       weatherForecastList: dailyForecast,
       geocoding: geocoding,
     );
-    _state = _state.copyWith(locations: [..._state.locations, newLocation]);
+
+    /// Adding location to Database
+    await _locationsRepository.saveLocation(geocoding: geocoding);
+
+    /// Adding location to UI + Setting currentLocation id of new location
+    _state = _state.copyWith(locations: [..._state.locations, newLocation], currentLocation: newLocation.id);
     _searchController.text = '';
     notifyListeners();
     await loadLocationChartStatistics(id: newLocation.id);

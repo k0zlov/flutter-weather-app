@@ -186,7 +186,12 @@ class _AddLocationWidgetState extends State<AddLocationWidget> with SingleTicker
         builder: (context) {
           return ChangeNotifierProvider.value(
             value: viewModel,
-            child: const FullScreenSearchInput(),
+            child: FullScreenSearchInput(
+              onSubmitted: () {
+                viewModel.addLocation(cityName: viewModel.searchController.text);
+                Navigator.of(context).pop();
+              },
+            ),
           );
         },
       );

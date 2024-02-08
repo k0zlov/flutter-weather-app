@@ -33,4 +33,22 @@ class GeocodingEntity {
   factory GeocodingEntity.fromModel(GeocodingModel model) {
     return GeocodingEntity(city: model.city, country: model.country, lat: model.lat, lon: model.lon);
   }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      "country": country,
+      "city": city,
+      "lat": lat,
+      "lon": lon,
+    };
+  }
+
+  factory GeocodingEntity.fromJson(Map<String, dynamic> json) {
+    return GeocodingEntity(
+      country: json['country'],
+      city: json['city'],
+      lat: json['lat'].toDouble(),
+      lon: json['lon'].toDouble(),
+    );
+  }
 }

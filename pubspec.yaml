@@ -45,6 +45,10 @@ dependencies:
   latlong2: ^0.9.0
   flutter_map_cancellable_tile_provider: ^2.0.0
   dotted_border: ^2.1.0
+  path: ^1.8.3
+  sembast: ^3.6.0
+  sqflite: ^2.3.2
+  sqflite_common_ffi_web: ^0.4.2+3
 
 dev_dependencies:
   flutter_test:

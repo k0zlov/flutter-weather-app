@@ -9,7 +9,7 @@ class HomePageState {
   final bool isMobileDashboard;
 
   const HomePageState({
-    this.isMobileDashboard = false,
+    this.isMobileDashboard = true,
     this.isLoading = true,
     this.isPressure = false,
     this.currentLocation = 0,
