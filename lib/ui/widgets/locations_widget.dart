@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
 import 'package:weather_app/ui/widgets/content_container.dart';
+import 'package:weather_app/ui/widgets/full_screen_search_input.dart';
 import 'package:weather_icons/weather_icons.dart';
 
 class LocationsListWidget extends StatelessWidget {
@@ -175,6 +176,20 @@ class _AddLocationWidgetState extends State<AddLocationWidget> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
+    final HomeViewModel viewModel = context.read<HomeViewModel>();
+
+    void showAddLocationDialog(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ChangeNotifierProvider.value(
+            value: viewModel,
+            child: const FullScreenSearchInput(),
+          );
+        },
+      );
+    }
+
     return MouseRegion(
       onEnter: (_) => setState(() {
         _iconController.repeat();
@@ -186,7 +201,7 @@ class _AddLocationWidgetState extends State<AddLocationWidget> with SingleTicker
         isHovered = false;
       }),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () => showAddLocationDialog(context),
         child: Stack(
           alignment: Alignment.topCenter,
           children: [

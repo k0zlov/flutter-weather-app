@@ -60,35 +60,37 @@ class HomeViewModel extends ChangeNotifier {
 
     _state = _state.copyWith(
       locations: [..._state.locations, ...newLocations],
-      currentLocation: newLocations[0].id,
+      currentLocation: newLocations.firstOrNull?.id ?? 1,
       isLoading: false,
     );
     notifyListeners();
 
-    for (LocationEntity location in state.locations) {
+    for (LocationEntity location in newLocations) {
       await loadLocationChartStatistics(id: location.id);
     }
   }
 
   Future<void> loadLocationChartStatistics({required int id}) async {
-    final List<LocationEntity> newLocations = [];
-    for (LocationEntity location in state.locations) {
+    LocationEntity? changedLocation;
+
+    for (int i = 0; i < _state.locations.length; i++) {
+      LocationEntity location = _state.locations[i];
       if (location.id == id) {
         final Map<String, dynamic> lastYearStatistics =
-            await _weatherRepository.getLastYearStatistics(geocoding: location.geocoding);
+        await _weatherRepository.getLastYearStatistics(geocoding: location.geocoding);
 
-        final changedLocation = location.copyWith(
+        changedLocation = location.copyWith(
           humidityLastYear: lastYearStatistics['humidity'],
           pressureLastYear: lastYearStatistics['pressure'],
         );
-        newLocations.add(changedLocation);
-      } else {
-        newLocations.add(location);
+
+        if (_state.locations.any((location) => location.id == id)) {
+          _state.locations[i] = changedLocation;
+          _state = _state.copyWith();
+          notifyListeners();
+        }
+        break;
       }
-    }
-    if(_state.locations.any((location) => location.id == id)) {
-      _state = _state.copyWith(locations: newLocations);
-      notifyListeners();
     }
   }
 
@@ -110,6 +112,26 @@ class HomeViewModel extends ChangeNotifier {
       _mapController.move(LatLng(currentLocation.geocoding.lat, currentLocation.geocoding.lon), 6);
     }
     notifyListeners();
+  }
+
+  Future<void> addLocation({required String cityName}) async {
+    if (cityName == '') return;
+
+    final GeocodingEntity geocoding = await _geocodingRepository.getEntityByCity(city: cityName);
+    final WeatherEntity weather = await _weatherRepository.getCurrentWeather(geocoding: geocoding);
+    final List<DayForecastEntity> dailyForecast = await _weatherRepository.getDailyForecast(geocoding: geocoding);
+    final LocationEntity newLocation = LocationEntity(
+      id: _state.locations.length + 1,
+      currentWeather: weather,
+      pressureLastYear: [],
+      humidityLastYear: [],
+      weatherForecastList: dailyForecast,
+      geocoding: geocoding,
+    );
+    _state = _state.copyWith(locations: [..._state.locations, newLocation]);
+    _searchController.text = '';
+    notifyListeners();
+    await loadLocationChartStatistics(id: newLocation.id);
   }
 
   /// Mobile Dashboard

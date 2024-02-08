@@ -17,13 +17,17 @@ class SearchField extends StatelessWidget {
       height: height,
       child: TextField(
         style: Theme.of(context).textTheme.titleMedium!.copyWith(
-          color: Theme.of(context).colorScheme.onSurface,
-        ),
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
         cursorColor: Theme.of(context).colorScheme.onSurface,
         controller: viewModel.searchController,
+        onSubmitted: (_) => viewModel.addLocation(cityName: viewModel.searchController.text),
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(0),
-          prefixIcon: const Icon(Icons.search),
+          prefixIcon: IconButton(
+            onPressed: () => viewModel.addLocation(cityName: viewModel.searchController.text),
+            icon: const Icon(Icons.search),
+          ),
           hintText: 'Search city',
           hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),

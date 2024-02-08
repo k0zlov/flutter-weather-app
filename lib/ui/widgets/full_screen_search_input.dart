@@ -6,10 +6,21 @@ class FullScreenSearchInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: SearchField(
-        width: 500,
-        height: 200,
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Add your new weather location', style: Theme.of(context).textTheme.headlineLarge),
+          const SizedBox(height: 10),
+          const Material(
+            elevation: 0,
+            color: Colors.transparent,
+            child: SearchField(
+              width: 500,
+              height: 200,
+            ),
+          ),
+        ],
       ),
     );
   }
