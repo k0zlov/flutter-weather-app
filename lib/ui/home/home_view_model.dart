@@ -99,9 +99,6 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> deleteLocation({required int id}) async {
     final List<LocationEntity> newLocations = _state.locations.where((location) => location.id != id).toList();
-    if (id == _state.currentLocation && newLocations.isNotEmpty) {
-      changeCurrentLocation(id: newLocations[0].id);
-    }
 
     /// Deleting location from Database
     await _locationsRepository.deleteLocation(
@@ -109,7 +106,7 @@ class HomeViewModel extends ChangeNotifier {
 
     /// Deleting location from UI
     _state =
-        _state.copyWith(locations: newLocations, currentLocation: newLocations.isEmpty ? 1 : _state.currentLocation);
+        _state.copyWith(locations: newLocations, currentLocation: newLocations.isEmpty ? 1 : newLocations[0].id);
     notifyListeners();
   }
 
