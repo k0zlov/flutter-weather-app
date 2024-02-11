@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:weather_app/domen/entities/day_forecast_entity.dart';
-import 'package:weather_app/domen/entities/geocoding_entity.dart';
-import 'package:weather_app/domen/entities/location_entity.dart';
-import 'package:weather_app/domen/entities/weather_entity.dart';
-import 'package:weather_app/domen/repositories/geocoding_repository.dart';
-import 'package:weather_app/domen/repositories/locations_repository.dart';
-import 'package:weather_app/domen/repositories/units_repository.dart';
-import 'package:weather_app/domen/repositories/weather_repository.dart';
+import 'package:weather_app/domain/entities/day_forecast_entity.dart';
+import 'package:weather_app/domain/entities/geocoding_entity.dart';
+import 'package:weather_app/domain/entities/location_entity.dart';
+import 'package:weather_app/domain/entities/weather_entity.dart';
+import 'package:weather_app/domain/repositories/geocoding_repository.dart';
+import 'package:weather_app/domain/repositories/locations_repository.dart';
+import 'package:weather_app/domain/repositories/units_repository.dart';
+import 'package:weather_app/domain/repositories/weather_repository.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 
 class HomeViewModel extends ChangeNotifier {

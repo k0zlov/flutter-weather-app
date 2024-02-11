@@ -1,8 +1,8 @@
 import 'package:weather_app/data/models/day_forecast_model.dart';
 import 'package:weather_app/data/models/weather_model.dart';
 import 'package:weather_app/data/providers/weather_provider.dart';
-import 'package:weather_app/domen/entities/day_forecast_entity.dart';
-import 'package:weather_app/domen/entities/geocoding_entity.dart';
+import 'package:weather_app/domain/entities/day_forecast_entity.dart';
+import 'package:weather_app/domain/entities/geocoding_entity.dart';
 
 import '../entities/weather_entity.dart';
 

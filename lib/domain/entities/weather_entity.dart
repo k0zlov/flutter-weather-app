@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/domen/entities/weather_hour_entity.dart';
+import 'package:weather_app/domain/entities/weather_hour_entity.dart';
 import 'package:weather_app/utils/icon_converter.dart';
 import 'package:weather_icons/weather_icons.dart';
 

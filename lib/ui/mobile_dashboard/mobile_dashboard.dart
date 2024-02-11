@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_app/domen/entities/weather_entity.dart';
+import 'package:weather_app/domain/entities/weather_entity.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
 import 'package:weather_app/ui/widgets/content_container.dart';

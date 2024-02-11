@@ -1,6 +1,6 @@
-import 'package:weather_app/domen/entities/day_forecast_entity.dart';
-import 'package:weather_app/domen/entities/geocoding_entity.dart';
-import 'package:weather_app/domen/entities/weather_entity.dart';
+import 'package:weather_app/domain/entities/day_forecast_entity.dart';
+import 'package:weather_app/domain/entities/geocoding_entity.dart';
+import 'package:weather_app/domain/entities/weather_entity.dart';
 
 class LocationEntity {
   final int id;

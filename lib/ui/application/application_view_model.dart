@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/domen/repositories/theme_repository.dart';
+import 'package:weather_app/domain/repositories/theme_repository.dart';
 import 'package:weather_app/ui/application/application_state.dart';
 
 class ApplicationViewModel extends ChangeNotifier {

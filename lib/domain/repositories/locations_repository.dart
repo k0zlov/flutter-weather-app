@@ -1,5 +1,5 @@
 import 'package:weather_app/data/providers/locations_provider.dart';
-import 'package:weather_app/domen/entities/geocoding_entity.dart';
+import 'package:weather_app/domain/entities/geocoding_entity.dart';
 
 class LocationsRepository {
   final LocationsDataProvider _locationsDataProvider = LocationsDataProvider();

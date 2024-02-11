@@ -3,7 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app/constants/constants.dart';
-import 'package:weather_app/domen/entities/location_entity.dart';
+import 'package:weather_app/domain/entities/location_entity.dart';
 import 'package:weather_app/ui/home/home_state.dart';
 import 'package:weather_app/ui/home/home_view_model.dart';
 

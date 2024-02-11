@@ -1,4 +1,4 @@
-import 'package:weather_app/domen/entities/location_entity.dart';
+import 'package:weather_app/domain/entities/location_entity.dart';
 
 class HomePageState {
   final bool isFahrenheit;
