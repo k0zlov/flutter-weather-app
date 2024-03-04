@@ -15,17 +15,21 @@ class WeatherDashboardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
+    final HomePageState state =
+        context.select((HomeViewModel viewModel) => viewModel.state);
 
-    final LocationEntity currentLocation =
-        state.locations.singleWhere((location) => location.id == state.currentLocation);
+    final LocationEntity currentLocation = state.locations
+        .singleWhere((location) => location.id == state.currentLocation);
 
-    final List<WeatherHourEntity> hourlyForecastList = currentLocation.currentWeather.hourlyForecast;
+    final List<WeatherHourEntity> hourlyForecastList =
+        currentLocation.currentWeather.hourlyForecast;
 
     final WeatherEntity currentWeather = currentLocation.currentWeather;
 
-    final String formattedHour = currentWeather.dateTime.hour.toString().padLeft(2, '0');
-    final String formattedMinute = currentWeather.dateTime.minute.toString().padLeft(2, '0');
+    final String formattedHour =
+        currentWeather.dateTime.hour.toString().padLeft(2, '0');
+    final String formattedMinute =
+        currentWeather.dateTime.minute.toString().padLeft(2, '0');
 
     return Column(
       children: [
@@ -42,8 +46,10 @@ class WeatherDashboardWidget extends StatelessWidget {
                 ...hourlyForecastList.map(
                   (e) {
                     return HourStatisticsBox(
-                      temperature:
-                          state.isFahrenheit ? TemperatureConverter.celsiusToFahrenheit(e.temperature) : e.temperature,
+                      temperature: state.isFahrenheit
+                          ? TemperatureConverter.celsiusToFahrenheit(
+                              e.temperature)
+                          : e.temperature,
                       time: '${e.dateTime.hour}:00',
                       icon: e.icon,
                     );
@@ -58,7 +64,8 @@ class WeatherDashboardWidget extends StatelessWidget {
           child: Text(
             'Updated ${currentWeather.dateTime.day} ${daysList[currentWeather.dateTime.weekday - 1]} $formattedHour:$formattedMinute',
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 ),
           ),
         ),
@@ -68,7 +75,11 @@ class WeatherDashboardWidget extends StatelessWidget {
 }
 
 class HourStatisticsBox extends StatefulWidget {
-  const HourStatisticsBox({super.key, required this.temperature, required this.time, required this.icon});
+  const HourStatisticsBox(
+      {super.key,
+      required this.temperature,
+      required this.time,
+      required this.icon});
 
   final int temperature;
   final String time;
@@ -97,7 +108,10 @@ class _HourStatisticsBoxState extends State<HourStatisticsBox> {
                 : Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(25),
             boxShadow: [
-              BoxShadow(color: Theme.of(context).colorScheme.onPrimary, offset: const Offset(-2, 1), blurRadius: 5)
+              BoxShadow(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  offset: const Offset(-2, 1),
+                  blurRadius: 5)
             ]),
         width: 68,
         margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
@@ -111,7 +125,8 @@ class _HourStatisticsBoxState extends State<HourStatisticsBox> {
             children: [
               Text(widget.time),
               const SizedBox(height: 2),
-              BoxedIcon(widget.icon, color: Theme.of(context).colorScheme.onPrimary),
+              BoxedIcon(widget.icon,
+                  color: Theme.of(context).colorScheme.onPrimary),
               const SizedBox(height: 2),
               Text('${widget.temperature}°'),
             ],
@@ -127,10 +142,11 @@ class DayStatistics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final HomePageState state = context.select((HomeViewModel viewModel) => viewModel.state);
+    final HomePageState state =
+        context.select((HomeViewModel viewModel) => viewModel.state);
 
-    final LocationEntity currentLocation =
-        state.locations.singleWhere((location) => location.id == state.currentLocation);
+    final LocationEntity currentLocation = state.locations
+        .singleWhere((location) => location.id == state.currentLocation);
 
     final WeatherEntity currentWeather = currentLocation.currentWeather;
 
@@ -149,21 +165,27 @@ class DayStatistics extends StatelessWidget {
           children: [
             BoxedIcon(currentWeather.icon, size: 80),
             const SizedBox(height: 2),
-            Text(currentWeather.description, style: Theme.of(context).textTheme.labelLarge),
+            Text(currentWeather.description,
+                style: Theme.of(context).textTheme.labelLarge),
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(currentLocation.geocoding.city.length > (isRestrictedScreen() ? 12 : 16)
-                ? '${currentLocation.geocoding.city.substring(0,isRestrictedScreen() ? 9 : 13)}...'
+            Text(currentLocation.geocoding.city.length >
+                    (isRestrictedScreen() ? 12 : 16)
+                ? '${currentLocation.geocoding.city.substring(0, isRestrictedScreen() ? 9 : 13)}...'
                 : currentLocation.geocoding.city),
-            Text(currentLocation.geocoding.country, style: Theme.of(context).textTheme.labelLarge)
+            Text(currentLocation.geocoding.country,
+                style: Theme.of(context).textTheme.labelLarge)
           ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [Text('$temperature°'), Text('Temperature', style: Theme.of(context).textTheme.labelLarge)],
+          children: [
+            Text('$temperature°'),
+            Text('Temperature', style: Theme.of(context).textTheme.labelLarge)
+          ],
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
