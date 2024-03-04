@@ -56,7 +56,7 @@ class WeatherDashboardWidget extends StatelessWidget {
         Align(
           alignment: Alignment.topLeft,
           child: Text(
-            'Updated ${currentWeather.dateTime.day} ${daysList[currentWeather.dateTime.weekday]} $formattedHour:$formattedMinute',
+            'Updated ${currentWeather.dateTime.day} ${daysList[currentWeather.dateTime.weekday - 1]} $formattedHour:$formattedMinute',
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                   color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 ),
