@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:weather_app/constants/constants.dart';
 import 'package:weather_app/data/models/day_forecast_model.dart';
 import 'package:weather_app/data/models/weather_hour_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:weather_app/utils/get_api_key.dart';
 
 import '../models/weather_model.dart';
 
@@ -11,7 +11,7 @@ class WeatherDataProvider {
   Future<List<DayForecastModel>?> getDailyForecast(
       {required double lat, required double lon, required int amountOfDays}) async {
     final uri = Uri.parse(
-        'https://api.openweathermap.org/data/2.5/forecast/daily?lat=$lat&lon=$lon&cnt=$amountOfDays&appid=$apiKey&units=metric');
+        'https://api.openweathermap.org/data/2.5/forecast/daily?lat=$lat&lon=$lon&cnt=$amountOfDays&appid=${getApiKey()}&units=metric');
     final response = await http.get(uri);
     final jsonBody = jsonDecode(response.body);
 
@@ -31,7 +31,7 @@ class WeatherDataProvider {
   Future<Map<String, dynamic>> getWeekStatistics(
       {required double lat, required double lon, required int fromUnixDate}) async {
     final uri = Uri.parse(
-        'https://history.openweathermap.org/data/2.5/history/city?lat=$lat&lon=$lon&type=hour&start=$fromUnixDate&appid=$apiKey&cnt=168&units=metric');
+        'https://history.openweathermap.org/data/2.5/history/city?lat=$lat&lon=$lon&type=hour&start=$fromUnixDate&appid=${getApiKey()}&cnt=168&units=metric');
     final response = await http.get(uri);
     final jsonBody = jsonDecode(response.body);
     if (response.statusCode == 200 && jsonBody != null && jsonBody.isNotEmpty) {
@@ -49,7 +49,7 @@ class WeatherDataProvider {
 
   Future<List<WeatherHourModel>?> getHourlyForecast({required double lat, required double lon, required amount}) async {
     final uri = Uri.parse(
-        'https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=$lat&lon=$lon&appid=$apiKey&units=metric&cnt=$amount');
+        'https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=$lat&lon=$lon&appid=${getApiKey()}&units=metric&cnt=$amount');
     final response = await http.get(uri);
     final jsonBody = jsonDecode(response.body);
 
@@ -68,7 +68,7 @@ class WeatherDataProvider {
   Future<WeatherModel?> getCurrentWeather(
       {required double lat, required double lon, required int hourlyForecastAmount}) async {
     final uri =
-        Uri.parse('https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$apiKey&units=metric');
+        Uri.parse('https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=${getApiKey()}&units=metric');
     final response = await http.get(uri);
     final jsonBody = jsonDecode(response.body);
 
